@@ -268,7 +268,6 @@ const profileNames = [
 "James Wilson",
 "Isabella Moore",
 "Michael Clark",
-"Charlotte Lewis",
 
 "Amelia Stone",
 "Sophia Carter",
