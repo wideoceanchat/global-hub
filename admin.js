@@ -708,6 +708,7 @@ lastMessage:text,
 lastSender:"admin",
 
 lastRead:false,
+
 unread:increment(1),
 
 lastTime:serverTimestamp(),
