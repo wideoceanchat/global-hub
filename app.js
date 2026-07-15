@@ -335,7 +335,7 @@ name:name,
 
 
 image:
-"oyibo/" + (index + 1) + ".jpeg",
+(index + 1) + ".jpeg",
 
 
 bio:
@@ -2457,7 +2457,7 @@ list.push({
 name:randomName,
 
 image:
-"oyibo/" + (((i+46)%84)+1) + ".jpeg",
+(((i+46)%84)+1) + ".jpeg",
 
 bio:
 "Available for international conversations.",
@@ -2681,7 +2681,7 @@ phone:userPhone,
 profile:"WomenClub Official Account",
 
 profileImage:
-"oyibo/45.jpeg",
+45.jpeg",
 
 type:"foreign-number",
 
@@ -2756,7 +2756,7 @@ name:
 
 
 image:
-"oyibo/45.jpeg",
+45.jpeg",
 
 
 status:
