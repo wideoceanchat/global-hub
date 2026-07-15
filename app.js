@@ -60,103 +60,102 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
-// =====================================
-// DEVICE LOGIN LOCK SYSTEM
-// =====================================
+// // =====================================
+// // DEVICE LOGIN LOCK SYSTEM
+// // =====================================
 
-const deviceKey =
-"globalHubDevice";
-
-
-// CREATE DEVICE ID
-
-function getDeviceId(){
-
-let id =
-localStorage.getItem("globalHubDeviceId");
+// const deviceKey =
+// "globalHubDevice";
 
 
-if(!id){
+// // CREATE DEVICE ID
 
-id =
-"device_" +
-Date.now() +
-"_" +
-Math.random()
-.toString(36)
-.substring(2);
+// function getDeviceId(){
+
+// let id =
+// localStorage.getItem("globalHubDeviceId");
 
 
-localStorage.setItem(
-"globalHubDeviceId",
-id
-);
+// if(!id){
 
-}
-
-
-return id;
-
-}
+// id =
+// "device_" +
+// Date.now() +
+// "_" +
+// Math.random()
+// .toString(36)
+// .substring(2);
 
 
-// CHECK DEVICE ACCOUNT
+// localStorage.setItem(
+// "globalHubDeviceId",
+// id
+// );
 
-function checkDeviceAccount(phone){
-
-
-const saved =
-localStorage.getItem(deviceKey);
-
-
-if(!saved){
-
-return true;
-
-}
+// }
 
 
-// DEVICE HAS ACCOUNT
+// return id;
 
-if(saved === phone){
-
-return true;
-
-}
+// }
 
 
-// DIFFERENT NUMBER BLOCK
+// // CHECK DEVICE ACCOUNT
 
-showLoginNotice(
-"You have an existing account. Please enter your Previous phone number."
-);
+// function checkDeviceAccount(phone){
 
 
-return false;
+// const saved =
+// localStorage.getItem(deviceKey);
 
 
-}
+// if(!saved){
+
+// return true;
+
+// }
+
+
+// // DEVICE HAS ACCOUNT
+
+// if(saved === phone){
+
+// return true;
+
+// }
+
+
+// // DIFFERENT NUMBER BLOCK
+
+// showLoginNotice(
+// "You have an existing account. Please enter your previous number."
+// );
+
+
+// return false;
+
+// }
 
 
 
-// SAVE FIRST LOGIN
+// // SAVE FIRST LOGIN
 
-function saveDeviceAccount(phone){
-
-
-localStorage.setItem(
-deviceKey,
-phone
-);
+// function saveDeviceAccount(phone){
 
 
-localStorage.setItem(
-"globalHubDevice",
-getDeviceId()
-);
+// localStorage.setItem(
+// deviceKey,
+// phone
+// );
 
 
-}
+// localStorage.setItem(
+// "globalHubDevice",
+// getDeviceId()
+// );
+
+
+// }
 
 // =====================================
 // VARIABLES
@@ -335,7 +334,7 @@ name:name,
 
 
 image:
-(index + 1) + ".jpeg",
+"oyibo/" + (index + 1) + ".jpeg",
 
 
 bio:
@@ -827,26 +826,36 @@ return;
 
 
 
-// CHECK DEVICE LOGIN OWNERSHIP
+// // CHECK DEVICE LOGIN OWNERSHIP
 
-if(!checkDeviceAccount(cleanPhone)){
+// if(!checkDeviceAccount(cleanPhone)){
 
-return;
+// return;
 
-}
-
-
-userPhone = cleanPhone;
+// }
 
 
-// SAVE FIRST SUCCESSFUL LOGIN
+// userPhone = cleanPhone;
 
-saveDeviceAccount(cleanPhone);
+
+// // SAVE FIRST SUCCESSFUL LOGIN
+
+// saveDeviceAccount(cleanPhone);
 
 
 localStorage.setItem(
-"globalHubPhone",
+"womenclubPhone",
 cleanPhone
+);
+
+
+
+userPhone = phone;
+
+
+localStorage.setItem(
+"womenclubPhone",
+phone
 );
 
 
@@ -1929,7 +1938,7 @@ userTyping:false
 }
 
 const savedPhone =
-localStorage.getItem("globalHubPhone");
+localStorage.getItem("womenclubPhone");
 
 
 // Remove automatic login
@@ -2457,7 +2466,7 @@ list.push({
 name:randomName,
 
 image:
-(((i+46)%84)+1) + ".jpeg",
+"oyibo/" + (((i+46)%84)+1) + ".jpeg",
 
 bio:
 "Available for international conversations.",
@@ -2681,7 +2690,7 @@ phone:userPhone,
 profile:"WomenClub Official Account",
 
 profileImage:
-45.jpeg",
+"oyibo/45.jpeg",
 
 type:"foreign-number",
 
@@ -2756,7 +2765,7 @@ name:
 
 
 image:
-45.jpeg",
+"oyibo/45.jpeg",
 
 
 status:
