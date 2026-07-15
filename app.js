@@ -269,7 +269,6 @@ const profileNames = [
 "Isabella Moore",
 "Michael Clark",
 
-"Amelia Stone",
 "Sophia Carter",
 "Olivia Martin",
 "Emma Williams",
