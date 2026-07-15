@@ -1,0 +1,3543 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    background: #111b21;
+}
+
+
+
+/* ==========================
+        USER CHAT
+========================== */
+
+
+.mobile-chat {
+
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #111b21;
+
+}
+
+
+
+.chat-top {
+
+    height: 75px;
+
+    background: #161d22;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 10px 15px;
+
+    flex-shrink: 0;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 10;
+
+}
+
+
+
+.profile-area {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+
+.profile-image {
+
+    width: 52px;
+
+    height: 52px;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    background: #2a3942;
+
+}
+
+
+
+.profile-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+
+
+.profile-area {
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+}
+
+
+
+.profile-image {
+
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    background: transparent;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.profile-image img {
+
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+
+}
+
+
+
+.profile-info h3 {
+
+    font-size: 17px;
+
+}
+
+
+.profile-info span {
+
+    color: #d9fdd3;
+    font-size: 12px;
+
+}
+
+
+
+
+.login-box {
+
+    width: min(92%, 460px);
+
+    min-height: 420px;
+
+    margin: auto;
+
+    padding: 45px 35px;
+
+    background: #202c33;
+
+    border: 1px solid #2f3d46;
+
+    border-radius: 18px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .45);
+
+}
+
+
+.login-box h2 {
+
+    color: #ffffff;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    text-align: center;
+
+    margin-bottom: 14px;
+
+}
+
+
+
+.login-box p {
+
+    color: #9aa5ab;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+
+    text-align: center;
+
+    margin-bottom: 30px;
+
+}
+
+
+
+.login-box input {
+
+    width: 100%;
+
+    height: 52px;
+
+    padding: 0 18px;
+
+    background: #2a3942;
+
+    color: #ffffff;
+
+    border: 1px solid #36454f;
+
+    border-radius: 12px;
+
+    outline: none;
+
+    font-size: 15px;
+
+    margin-bottom: 22px;
+
+}
+
+.login-box input::placeholder {
+
+    color: #9aa5ab;
+
+}
+
+
+
+.login-box input:focus {
+
+    border-color: #25d366;
+
+}
+
+
+
+.login-box button {
+
+    width: 100%;
+
+    height: 52px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #25d366;
+
+    color: #111b21;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+}
+
+
+
+.login-box button:hover {
+
+    background: #22c55e;
+
+}
+
+.login-box input {
+
+    width: 100%;
+
+    padding: 15px;
+
+    margin: 20px 0;
+
+    border-radius: 25px;
+
+    border: none;
+
+}
+
+
+
+.login-box button {
+
+    width: 100%;
+
+    padding: 15px;
+
+    border: none;
+
+    border-radius: 25px;
+
+    background: #25d366;
+
+    color: white;
+
+}
+
+
+.country-option {
+
+    margin-top: -10px;
+
+    margin-bottom: 25px;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    color: #9aa5ab;
+
+}
+
+
+.chat-container {
+
+    display: none;
+
+    flex-direction: column;
+
+    flex: 1;
+
+    min-height: 0;
+
+}
+
+.security-notice {
+
+    width: fit-content;
+
+    max-width: 90%;
+
+    margin: 12px auto;
+
+    padding: 8px 12px;
+
+    background: #3b3a25;
+
+    color: #e7c65c;
+
+    font-size: 12px;
+
+    text-align: center;
+
+    border-radius: 8px;
+
+    line-height: 1.4;
+
+}
+
+.start-conversation {
+
+    width: fit-content;
+
+    margin: 0 auto 12px;
+
+    padding: 8px 18px;
+
+    background: #3b3a25;
+
+    color: #e7c65c;
+
+    font-size: 13px;
+
+    border-radius: 8px;
+
+    text-align: center;
+
+}
+
+.messages,
+.admin-messages {
+
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: 15px;
+
+    background-color: #111b21;
+    
+        background-image:
+            url("data:image/svg+xml,%3Csvg width='140' height='140' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23808a90' stroke-width='1' opacity='0.14'%3E%3Cpath d='M28 25v25c0 6-8 6-8 0s8-6 8 0'/%3E%3Cpath d='M28 25h12'/%3E%3Cpath d='M85 28c0-6 8-6 8 0v18c0 6-8 6-8 0z'/%3E%3Cpath d='M30 95c12-10 25-10 38 0'/%3E%3Cpath d='M95 90l18-12'/%3E%3C/g%3E%3Cg fill='%23808a90' opacity='0.14'%3E%3Ctext x='15' y='20' font-size='12'%3E♪%3C/text%3E%3Ctext x='105' y='55' font-size='13'%3E♫%3C/text%3E%3Ctext x='60' y='125' font-size='12'%3E♬%3C/text%3E%3Ctext x='120' y='120' font-size='11'%3E♩%3C/text%3E%3C/g%3E%3C/svg%3E");
+    
+        background-repeat: repeat;
+    
+        background-size: 140px 140px;
+}
+
+.message {
+
+    width: fit-content;
+
+    max-width: 75%;
+
+    padding: 8px 12px;
+
+    margin: 6px 0;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+
+    word-wrap: break-word;
+
+    overflow-wrap: break-word;
+
+}
+
+
+
+/* MY MESSAGE (shows green only on MY screen) */
+
+.sent {
+
+    background: #005c4b;
+
+    color: #ffffff;
+
+    margin-left: auto;
+
+    border-top-right-radius: 2px;
+
+}
+
+
+
+/* MESSAGE I RECEIVED (always gray on MY screen) */
+
+.received {
+
+    background: #2a3942;
+
+    color: #ffffff;
+
+    margin-right: auto;
+
+    border-top-left-radius: 2px;
+
+}
+
+.message-time {
+
+    display: inline;
+
+    margin-left: 8px;
+
+    font-size: 10px;
+
+    color: #c7d1d5;
+
+    text-align: right;
+
+}
+
+.typing-area {
+
+    height: 65px;
+
+    background: #202c33;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px;
+
+}
+
+.typing-area input {
+
+    flex: 1;
+
+    padding: 14px 18px;
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 25px;
+
+    background: #2a3942;
+
+    color: white;
+
+}
+
+
+
+.typing-area input::placeholder {
+
+    color: #9aa5ab;
+
+}
+
+
+
+#sendMessage {
+
+    width: 45px;
+
+    height: 45px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    background: #25d366;
+
+    color: #000000;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+
+.emoji-btn {
+
+    width: 35px;
+
+    height: 35px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #9aa5ab;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    padding: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+.emoji-btn {
+
+    width: 35px;
+
+    height: 35px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #9aa5ab;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    padding: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.emoji-panel {
+
+    display: none;
+
+    position: absolute;
+
+    bottom: 65px;
+
+    left: 10px;
+
+    right: 10px;
+
+    height: 220px;
+
+    background: #202c33;
+
+    border-radius: 12px;
+
+    padding: 8px;
+
+    overflow-y: auto;
+
+    grid-template-columns: repeat(10, 1fr);
+
+    gap: 4px;
+
+}
+
+.emoji-panel span {
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+/* ==========================
+        ADMIN DASHBOARD
+========================== */
+
+
+.admin-dashboard {
+
+    display: flex;
+
+    height: 100vh;
+
+}
+
+
+
+/* CONTACT LIST */
+
+.admin-users {
+
+    width: 340px;
+
+    background: #202c33;
+
+    color: white;
+
+}
+
+.admin-header {
+
+    height: 70px;
+
+    background: #075e54;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 15px;
+
+}
+
+.admin-avatar {
+
+    width: 45px;
+
+    height: 45px;
+
+    background: #25d366;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+}
+
+
+
+
+.search-box {
+
+    padding: 12px;
+
+}
+
+
+
+.search-box input {
+
+    width: 100%;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 20px;
+
+}
+
+
+
+
+
+.users-list {
+
+    padding: 10px;
+
+}
+
+
+
+
+.user-card {
+
+    background: #2a3942;
+
+    color: white;
+
+    padding: 15px;
+
+    margin-bottom: 8px;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+
+}
+
+
+
+.user-card:hover {
+
+    background: #374955;
+
+}
+
+
+
+
+
+/* CHAT SIDE */
+
+
+.admin-chat {
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+
+
+.admin-chat-header {
+
+    height: 70px;
+
+    background: #202c33;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 15px;
+
+}
+
+
+
+
+
+.customer-profile {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+
+.customer-avatar {
+
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: transparent;
+
+}
+
+.customer-avatar img {
+
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+
+}
+
+.admin-input-area {
+
+    height: 65px;
+
+    background: #202c33;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px;
+
+}
+
+
+
+
+.admin-input-area input {
+
+    flex: 1;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 25px;
+
+    outline: none;
+
+}
+
+
+
+
+.admin-input-area button {
+
+    width: 45px;
+
+    height: 45px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    background: #25d366;
+
+    color: white;
+
+}
+
+.message-box {
+
+    flex: 1;
+
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    background: #2a3942;
+
+    border-radius: 25px;
+
+    padding: 0 10px;
+
+}
+
+.message-box input {
+
+    flex: 1;
+
+    background: transparent;
+
+    border: none;
+
+    outline: none;
+
+    color: white;
+
+    padding: 0 8px;
+
+    font-size: 15px;
+
+}
+
+
+
+.message-box input::placeholder {
+
+    color: #9aa5ab;
+
+}
+
+
+
+
+
+@media(max-width:700px) {
+
+    .admin-users {
+
+        display: none;
+
+    }
+
+}
+
+/* ==============================
+   WHATSAPP STYLE CONTACT LIST
+================================*/
+
+
+.contacts-page {
+
+    height: 100vh;
+
+    background: #ffffff;
+
+    overflow: hidden;
+
+}
+
+
+
+.contacts-header {
+
+    height: 60px;
+
+    background: #075e54;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 18px;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+}
+
+
+
+.header-icons {
+
+    font-size: 20px;
+
+}
+
+
+
+.contacts-title {
+
+    padding: 15px;
+
+    font-size: 15px;
+
+    color: #777;
+
+    background: #f5f5f5;
+
+}
+
+
+
+
+.contacts-list {
+
+    height: calc(100vh - 110px);
+
+    overflow-y: auto;
+
+}
+
+
+
+.contact-item {
+
+    height: 72px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 16px;
+
+    background: #111b21;
+
+    border-bottom: none;
+
+    cursor: pointer;
+
+}
+
+
+
+.contact-item:hover {
+
+    background: #f5f5f5;
+
+}
+
+
+
+.contact-image img {
+
+
+    width: 55px;
+
+    height: 55px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+
+}
+
+
+
+.contact-details {
+
+
+    margin-left: 15px;
+
+    flex: 1;
+
+
+}
+
+
+
+.contact-details h3 {
+
+
+    margin: 0;
+
+    font-size: 17px;
+
+    font-weight: 500;
+
+
+}
+
+
+
+.contact-details p {
+
+
+    margin-top: 5px;
+
+    margin-bottom: 0;
+
+    font-size: 14px;
+
+    color: #777;
+
+
+}
+
+
+
+.online-dot {
+
+
+    font-size: 12px;
+
+    color: #25d366;
+
+}
+
+/* ==============================
+   WOMENCLUB WHATSAPP CONTACT LIST
+================================*/
+
+
+.contacts-container {
+
+    width: 100%;
+    height: 100vh;
+    background: #111b21;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+}
+
+
+/* FIXED WHATSAPP STYLE HEADER */
+
+.contacts-header {
+
+    height: 60px;
+
+    background: #202c33;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 18px;
+
+    flex-shrink: 0;
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    z-index: 100;
+
+}
+
+
+
+.contacts-header h2 {
+
+    font-size: 20px;
+
+    font-weight: 600;
+
+}
+
+
+
+/* REMOVE SEARCH + THREE DOT AREA */
+
+.header-icons {
+
+    display: none;
+
+}
+
+
+
+/* CONTACT TITLE */
+
+.contacts-title {
+
+    height: 35px;
+
+    margin-top: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    padding-left: 18px;
+
+    background: #111b21;
+
+    color: #8696a0;
+
+    font-size: 14px;
+
+    flex-shrink: 0;
+
+}
+
+
+
+/* SCROLLABLE CONTACT AREA */
+
+.contacts-list {
+
+    flex: 1;
+
+    overflow-y: auto;
+
+    min-height: 0;
+
+    padding-top: 30px;
+
+}
+
+
+
+/* CONTACT ROW */
+
+.contact-item {
+
+    height: 72px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 16px;
+
+    background: #111b21;
+
+    border-bottom: 1px solid #222d34;
+
+}
+
+
+
+.contact-item:hover {
+
+    background: #202c33;
+
+}
+
+
+
+/* PROFILE IMAGE */
+
+.contact-image {
+
+    width: 52px;
+
+    height: 52px;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+
+}
+
+
+
+.contact-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+}
+
+
+
+/* NAME AREA */
+
+.contact-details {
+
+    margin-left: 15px;
+
+    flex: 1;
+
+}
+
+
+
+.contact-details h3 {
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: 500;
+
+    margin-bottom: 4px;
+
+}
+
+
+
+.contact-details p {
+
+    font-size: 14px;
+
+}
+
+.contact-details .online-text {
+
+    color: #25d366 !important;
+
+    font-weight: 500;
+
+}
+
+.contact-details .offline-text {
+
+    color: #8696a0 !important;
+
+}
+
+/* ONLINE STATUS */
+
+.contact-status {
+
+    color: #25d366;
+
+    font-size: 12px;
+
+}
+
+
+
+/* When contacts open, hide chat */
+
+
+.hide-screen {
+
+    display: none !important;
+
+}
+
+
+
+/* Chat header profile correction */
+
+
+#chatProfileImage {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+}
+
+
+
+/* Mobile WhatsApp feel */
+
+
+@media(max-width:700px) {
+
+
+    .contacts-container {
+
+        width: 100%;
+
+    }
+
+
+    .contact-item {
+
+        height: 72px;
+
+    }
+
+
+    .contact-image {
+
+        width: 52px;
+
+        height: 52px;
+
+    }
+
+
+}
+
+.message-badge {
+
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+
+    background: #25d366;
+
+    color: #111;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-left: auto;
+
+}
+
+.back-btn {
+
+    width: 42px;
+
+    height: 42px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #fff;
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-right: 10px;
+
+    transition: .2s;
+
+}
+
+.back-btn:hover {
+
+    background: rgba(255, 255, 255, .15);
+
+}
+
+#profileViewer{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100%;
+
+background:#111b21;
+
+color:white;
+
+z-index:99999;
+
+display:none;
+
+text-align:center;
+
+padding-top:40px;
+
+}
+
+
+
+#profileViewer img{
+
+width:240px;
+
+height:240px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+}
+
+
+
+#profileViewer button{
+
+position:absolute;
+
+right:20px;
+
+top:20px;
+
+background:none;
+
+border:none;
+
+color:white;
+
+font-size:35px;
+
+}
+
+
+
+#profileViewer p{
+
+padding:20px;
+
+font-size:16px;
+
+color:#d9d9d9;
+
+}
+
+
+
+#profileHobbies span{
+
+display:inline-block;
+
+background:#202c33;
+
+padding:8px 15px;
+
+border-radius:20px;
+
+margin:5px;
+
+}
+#profileViewer{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100%;
+
+background:#111b21;
+
+color:white;
+
+z-index:99999;
+
+display:none;
+
+text-align:center;
+
+padding-top:40px;
+
+}
+
+
+
+#profileViewer img{
+
+width:240px;
+
+height:240px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+}
+
+
+
+#profileViewer button{
+
+position:absolute;
+
+right:20px;
+
+top:20px;
+
+background:none;
+
+border:none;
+
+color:white;
+
+font-size:35px;
+
+}
+
+
+
+#profileViewer p{
+
+padding:20px;
+
+font-size:16px;
+
+color:#d9d9d9;
+
+}
+
+
+
+#profileHobbies span{
+
+display:inline-block;
+
+background:#202c33;
+
+padding:8px 15px;
+
+border-radius:20px;
+
+margin:5px;
+
+}
+
+#profileViewer {
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    background: #111b21;
+
+    color: white;
+
+    z-index: 99999;
+
+    overflow-y: auto;
+
+}
+
+
+
+#mainProfileViewer {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 320px;
+
+    overflow: hidden;
+
+}
+
+
+#smallSwitchImage img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    display: block;
+
+}
+
+
+#mainProfileViewer {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 320px;
+
+    display: flex;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+}
+
+
+#mainDisplayImage {
+
+    width: 100%;
+
+    max-width: 500px;
+
+    height: 320px;
+
+    object-fit: cover;
+
+    object-position: center center;
+
+    display: block;
+
+}
+
+
+
+#smallSwitchImage {
+
+    position: absolute;
+
+    bottom: 15px;
+
+    left: 50%;
+
+    transform: translateX(-150px);
+
+    width: 75px;
+
+    height: 75px;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    background: transparent;
+
+    z-index: 10;
+
+    padding: 0;
+
+    cursor: pointer;
+
+}
+
+#smallSwitchImage img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    display: block;
+
+}
+
+
+
+#profileBigImage {
+
+    width: 120px;
+
+    height: 120px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    object-fit: cover;
+
+    margin-top: -60px;
+
+    position: relative;
+
+}
+
+
+
+#profileName {
+
+    font-size: 24px;
+
+    margin-top: 15px;
+
+}
+
+
+
+.profile-status {
+
+    color: #25d366;
+
+    margin-top: 5px;
+
+}
+
+
+
+.profile-section {
+
+    background: #202c33;
+
+    margin: 20px;
+
+    padding: 18px;
+
+    border-radius: 12px;
+
+    text-align: left;
+
+}
+
+
+
+.profile-section h3 {
+
+    color: #8696a0;
+
+    margin-bottom: 10px;
+
+}
+
+
+
+#profileHobbies span {
+
+    display: inline-block;
+
+    background: #2a3942;
+
+    padding: 8px 14px;
+
+    border-radius: 20px;
+
+    margin: 5px;
+
+}
+
+
+
+#closeProfile {
+
+    position: absolute;
+
+    right: 20px;
+
+    top: 20px;
+
+    z-index: 10;
+
+    background: rgba(0, 0, 0, .5);
+
+    border: none;
+
+    color: white;
+
+    font-size: 35px;
+
+    border-radius: 50%;
+
+}
+
+/* Remove all contact separators */
+
+.contacts-list .contact-item {
+
+    border-bottom: none !important;
+
+}
+
+.online-text {
+
+    color: #25d366;
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+}
+
+.offline-text {
+
+    color: #8696a0;
+
+    font-size: 14px;
+
+}
+
+.contacts-footer {
+
+    text-align: center;
+
+    padding: 28px 20px 40px;
+
+    color: #8696a0;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+}
+
+.contacts-footer span {
+
+    color: #25d366;
+
+    font-weight: 600;
+
+}
+
+.online-text {
+
+    color: #25d366 !important;
+
+    font-weight: 500;
+
+}
+
+
+.offline-text {
+
+    color: #8696a0 !important;
+
+}
+
+.contacts-encryption {
+
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #111b21;
+
+    color: #8696a0;
+
+    font-size: 13px;
+
+    border-top: 1px solid #222d34;
+
+    flex-shrink: 0;
+
+}
+
+
+.contacts-encryption span {
+
+    color: #25d366;
+
+    margin-left: 4px;
+
+}
+
+.ticks {
+
+    font-size: 14px;
+
+    margin-left: 5px;
+
+    color: #8696a0;
+
+}
+
+
+.blue-ticks {
+
+    color: #53bdeb;
+
+}
+
+.ticks {
+
+    font-size: 14px;
+
+    color: #8696a0;
+
+    margin-left: 5px;
+
+}
+
+
+.blue-ticks {
+
+    color: #53bdeb;
+
+}
+
+.other-countries-btn {
+
+    width: calc(100% - 24px);
+
+    margin: 5px auto 30px;
+
+    padding: 16px;
+
+    background: #25d366;
+
+    color: #fff;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    text-align: center;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+
+}
+
+.other-countries-btn:hover {
+
+    background: #1ebd5a;
+
+    transform: translateY(-2px);
+
+}
+
+.other-countries-btn:active {
+
+    transform: scale(.98);
+
+}
+
+.country-overlay {
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, .75);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 999999;
+
+}
+
+
+.country-card button {
+
+    width: 100%;
+
+    height: 50px;
+
+    margin-top: 15px;
+
+    border-radius: 12px;
+
+    border: none;
+
+    background: #25d366;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+.purchase-title {
+
+    color: #8696a0;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    margin: 12px 0 8px;
+
+    text-align: left;
+
+    letter-spacing: .5px;
+
+}
+
+
+
+.location-title {
+
+    margin-top: 18px;
+
+}
+
+
+
+.purchase-row {
+
+    background: rgba(255, 255, 255, .08);
+
+    border-radius: 10px;
+
+    padding: 10px 12px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 8px;
+
+}
+
+
+
+.purchase-row span {
+
+    color: #aebac1;
+
+    font-size: 13px;
+
+}
+
+
+
+.purchase-row strong {
+
+    color: white;
+
+    font-size: 14px;
+
+}
+
+
+
+.account-row {
+
+    position: relative;
+
+    padding-right: 70px;
+
+}
+
+
+
+.copy-btn {
+
+    position: absolute;
+
+    right: 8px;
+
+    width: auto !important;
+
+    height: 28px !important;
+
+    padding: 0 12px !important;
+
+    margin: 0 !important;
+
+    background: #25d366 !important;
+
+    color: #111 !important;
+
+    border-radius: 8px !important;
+
+    font-size: 12px !important;
+
+}
+
+/* =====================================
+   WOMENCLUB PAYMENT CONFIRMATION CARD
+===================================== */
+
+
+.country-overlay {
+
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, .75);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 999999;
+
+}
+
+
+/* MAIN CARD */
+
+/* =====================================
+   FOREIGN NUMBER PAYMENT CARD
+===================================== */
+
+.country-card {
+
+    width: 92%;
+    max-width: 360px;
+
+    background: #202c33;
+
+    border-radius: 16px;
+
+    color: white;
+
+    overflow: hidden;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .5);
+
+}
+
+
+/* TITLE */
+
+.country-card h2 {
+
+    background: #075e54;
+
+    padding: 15px;
+
+    text-align: center;
+
+    font-size: 18px;
+
+}
+
+
+
+/* PAYMENT BOX */
+
+.payment-box {
+
+    padding: 15px;
+
+}
+
+
+
+/* SECTION TITLE */
+
+.payment-title {
+
+    color: #25d366;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    margin: 10px 0;
+
+}
+
+
+
+/* DETAILS */
+
+.payment-item,
+.account-row {
+
+    background: #111b21;
+
+    border-radius: 10px;
+
+    padding: 10px 12px;
+
+    margin-bottom: 8px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    font-size: 14px;
+
+}
+
+
+.payment-item span,
+.account-row span {
+
+    color: #8696a0;
+
+}
+
+
+.payment-item strong,
+.account-row strong {
+
+    color: white;
+
+}
+
+
+
+/* ACCOUNT NUMBER + COPY BESIDE IT */
+
+.account-row strong {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+
+.copy-btn {
+
+    position: static !important;
+
+    width: auto !important;
+
+    height: 26px !important;
+
+    padding: 0 10px !important;
+
+    margin: 0 !important;
+
+    border-radius: 7px !important;
+
+    background: #25d366 !important;
+
+    color: #111b21 !important;
+
+    font-size: 12px !important;
+
+    font-weight: 700;
+
+}
+
+
+
+/* PAID BUTTON */
+
+.payment-confirm {
+
+    margin: 0 15px;
+
+    background: #25d366;
+
+    color: #111b21;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+}
+
+
+
+/* EXIT */
+
+.exit-btn {
+
+    background: #374045 !important;
+
+    color: white !important;
+
+    margin-bottom: 15px !important;
+
+}
+
+.country-card input {
+
+    width: 100%;
+
+    height: 50px;
+
+    background: #111b21;
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 10px;
+
+    padding: 0 15px;
+
+    color: white;
+
+    font-size: 15px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.country-card input::placeholder {
+
+    color: #8696a0;
+
+}
+
+.special-control {
+
+    background: #ffffff;
+
+    margin: 15px;
+
+    padding: 15px;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, .08);
+
+}
+
+
+
+.special-control h3 {
+
+    margin: 0;
+
+    font-size: 17px;
+
+    color: #111;
+
+}
+
+
+
+.special-control p {
+
+    font-size: 12px;
+
+    color: #777;
+
+    margin: 5px 0 15px;
+
+}
+
+
+
+.special-input {
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+
+
+.special-input input {
+
+    flex: 1;
+
+    padding: 12px;
+
+    border: none;
+
+    outline: none;
+
+    background: #f1f3f5;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+
+}
+
+
+
+.special-input button {
+
+    background: #25d366;
+
+    color: white;
+
+    border: none;
+
+    padding: 0 18px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+
+
+.special-title {
+
+    margin-top: 18px;
+
+    font-weight: bold;
+
+    font-size: 14px;
+
+}
+
+
+
+.special-list {
+
+    margin-top: 10px;
+
+    max-height: 120px;
+
+    overflow: auto;
+
+}
+
+
+
+.special-number-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background: #f8f9fa;
+
+    padding: 10px;
+
+    margin-bottom: 8px;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+
+}
+
+
+
+.remove-special {
+
+    background: #ff4757;
+
+    color: white;
+
+    border: none;
+
+    padding: 5px 10px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+}
+
+/* =====================================
+   WOMENCLUB ATM STYLE BALANCE CARD
+===================================== */
+
+.balance-message {
+
+    width: 270px;
+
+    min-height: 155px;
+
+    margin: 18px auto;
+
+    padding: 18px;
+
+    border-radius: 18px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(135deg,
+            #075e54,
+            #128c7e,
+            #25d366);
+
+    color: white;
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, .45);
+
+    animation: balanceAppear .35s ease;
+
+}
+
+
+/* ATM CARD SHINE */
+
+.balance-message::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 160px;
+
+    height: 160px;
+
+    right: -50px;
+
+    top: -50px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, .12);
+
+}
+
+
+.balance-message::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 100px;
+
+    height: 100px;
+
+    left: -30px;
+
+    bottom: -30px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, .08);
+
+}
+
+
+
+/* TOP TEXT */
+
+.balance-message div {
+
+    position: relative;
+
+    z-index: 2;
+
+    font-size: 12px;
+
+    letter-spacing: 1px;
+
+    color: rgba(255, 255, 255, .85);
+
+    text-transform: uppercase;
+
+    margin-bottom: 8px;
+
+}
+
+
+
+/* BALANCE AMOUNT */
+
+.balance-message h2 {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin: 0;
+
+    font-size: 25px;
+
+    letter-spacing: 1px;
+
+    color: white;
+
+    font-weight: 800;
+
+}
+
+
+
+/* ATM CHIP */
+
+.balance-message h2::before {
+
+    content: "▣";
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 28px;
+
+    height: 20px;
+
+    margin-right: 10px;
+
+    border-radius: 5px;
+
+    background: #e7c65c;
+
+    color: #9b7b00;
+
+    font-size: 15px;
+
+}
+
+
+
+/* BUTTON */
+
+.balance-message button {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 18px;
+
+    width: 110px;
+
+    height: 34px;
+
+    border: none;
+
+    border-radius: 20px;
+
+    background: white;
+
+    color: #075e54;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+}
+
+
+.balance-message button:hover {
+
+    transform: translateY(-2px);
+
+}
+
+
+
+.balance-message button:active {
+
+    transform: scale(.95);
+
+}
+
+
+
+/* CARD LABEL */
+
+.balance-message .card-label {
+
+    position: absolute;
+
+    right: 18px;
+
+    top: 18px;
+
+    font-size: 11px;
+
+    color: rgba(255, 255, 255, .8);
+
+    letter-spacing: 1px;
+
+}
+
+
+
+@keyframes balanceAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(20px) scale(.95);
+
+    }
+
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0) scale(1);
+
+    }
+
+}
+
+/* =====================================
+   WOMENCLUB RECHARGE ACCOUNT OVERLAY
+===================================== */
+
+
+.recharge-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(17, 27, 33, .55);
+
+    backdrop-filter: blur(3px);
+
+    z-index: 999999;
+
+}
+
+
+
+.recharge-card {
+
+    width: 290px;
+
+    padding: 20px;
+
+    border-radius: 20px;
+
+    background:
+
+        linear-gradient(145deg,
+            rgba(32, 44, 51, .95),
+            rgba(7, 94, 84, .88));
+
+
+    color: white;
+
+    box-shadow:
+
+        0 20px 50px rgba(0, 0, 0, .55);
+
+
+    border: 1px solid rgba(255, 255, 255, .12);
+
+    animation: rechargeShow .3s ease;
+
+}
+
+
+
+.recharge-close {
+
+    width: 35px;
+
+    height: 35px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    background: #25d366;
+
+    color: #111b21;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+
+.recharge-card h2 {
+
+    text-align: center;
+
+    margin: 15px 0 20px;
+
+    font-size: 20px;
+
+}
+
+
+
+.recharge-item {
+
+
+    background: rgba(17, 27, 33, .75);
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    margin-bottom: 10px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+}
+
+
+
+.recharge-item span {
+
+    color: #8696a0;
+
+    font-size: 13px;
+
+}
+
+
+
+.recharge-item strong {
+
+    color: white;
+
+    font-size: 13px;
+
+}
+
+
+
+.payment-done {
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    color: #ffffff;
+
+    background: linear-gradient(90deg,
+            #25d366,
+            #128c7e);
+
+    cursor: pointer;
+
+    animation: pulseSubscribe 1.8s infinite;
+
+    transition: 0.3s;
+
+}
+
+
+.payment-done:hover {
+
+    transform: scale(1.03);
+
+}
+
+
+@keyframes pulseSubscribe {
+
+
+    0% {
+
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+
+    }
+
+
+    70% {
+
+        box-shadow: 0 0 0 12px rgba(37, 211, 102, 0);
+
+    }
+
+
+    100% {
+
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+
+    }
+
+
+}
+
+.recharge-card.shake-card {
+
+    animation: cardShake 0.6s ease;
+
+}
+
+
+@keyframes cardShake {
+
+
+    0% {
+
+        transform: translateX(0);
+
+    }
+
+
+    20% {
+
+        transform: translateX(-10px);
+
+    }
+
+
+    40% {
+
+        transform: translateX(10px);
+
+    }
+
+
+    60% {
+
+        transform: translateX(-8px);
+
+    }
+
+
+    80% {
+
+        transform: translateX(8px);
+
+    }
+
+
+    100% {
+
+        transform: translateX(0);
+
+    }
+
+
+}
+
+
+
+@keyframes rechargeShow {
+
+    from {
+
+        opacity: 0;
+
+        transform: scale(.9);
+
+    }
+
+
+    to {
+
+        opacity: 1;
+
+        transform: scale(1);
+
+    }
+
+}
+
+.account-copy {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+.copy-btn {
+
+    padding: 8px 14px;
+
+    border: 1px solid rgba(255, 255, 255, .18);
+
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, .08);
+
+    backdrop-filter: blur(10px);
+
+    -webkit-backdrop-filter: blur(10px);
+
+    color: rgba(255, 255, 255, .95);
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+.copy-btn:hover {
+
+    background: rgba(255, 255, 255, .15);
+
+    border-color: rgba(255, 255, 255, .28);
+
+}
+
+.copy-btn:active {
+
+    transform: scale(.96);
+
+}
+
+/* =====================================
+   WOMENCLUB MESSAGE EDIT GLASS CARD
+===================================== */
+
+
+.edit-message-box {
+
+    position: fixed;
+
+    top: 50%;
+
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 300px;
+
+    padding: 20px;
+
+    border-radius: 18px;
+
+    z-index: 9999;
+
+
+    /* LIGHT GLASS */
+
+    background: rgba(32, 44, 51, 0.78);
+
+    backdrop-filter: blur(8px);
+
+    -webkit-backdrop-filter: blur(8px);
+
+
+    border: 1px solid rgba(255, 255, 255, .12);
+
+
+    box-shadow:
+
+        0 15px 40px rgba(0, 0, 0, .45);
+
+
+    color: white;
+
+}
+
+
+
+.edit-title {
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    margin-bottom: 14px;
+
+    color: white;
+
+}
+
+
+
+.edit-message-box input {
+
+    width: 100%;
+
+    height: 45px;
+
+    padding: 0 14px;
+
+    border-radius: 12px;
+
+
+    background: rgba(17, 27, 33, .65);
+
+
+    border: 1px solid rgba(255, 255, 255, .12);
+
+
+    outline: none;
+
+
+    color: white;
+
+    font-size: 14px;
+
+}
+
+
+
+.edit-message-box input::placeholder {
+
+    color: #8696a0;
+
+}
+
+
+
+.edit-message-box button {
+
+    margin-top: 14px;
+
+    padding: 9px 18px;
+
+    border-radius: 20px;
+
+    border: none;
+
+
+    background: #25d366;
+
+    color: #111b21;
+
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+
+    cursor: pointer;
+
+}
+
+
+
+.edit-message-box button:last-child {
+
+    background: rgba(255, 255, 255, .12);
+
+    color: white;
+
+    margin-left: 8px;
+
+}
+
+
+/* MESSAGE EDITED LABEL */
+
+.edited-label {
+
+    font-size: 9px;
+
+    font-weight: 400;
+
+    color: #8696a0;
+
+    opacity: .8;
+
+    margin-left: 5px;
+
+}
+
+#imageViewer {
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.95);
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 9999;
+
+}
+
+
+#fullProfileImage {
+
+    max-width: 95%;
+
+    max-height: 90%;
+
+    object-fit: contain;
+
+    border-radius: 10px;
+
+}
+
+
+
+#closeImageViewer {
+
+    position: absolute;
+
+    top: 25px;
+
+    right: 25px;
+
+    font-size: 40px;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+img {
+    object-fit: cover;
+}
+
+img:not([src]),
+img[src=""] {
+    display: none;
+}
+
+#chatProfileZoom {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 99999;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    background: rgba(255, 255, 255, .08);
+    border: 1px solid rgba(255, 255, 255, .18);
+    transition: .25s ease;
+    transform-origin: center;
+    pointer-events: none;
+}
+
+#chatProfileZoom img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#chatProfileZoom .zoom-status {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 18px;
+    text-align: center;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    opacity: 0;
+    transition: .2s;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, .6);
+}
+
+#chatProfileZoom.active {
+    left: 50% !important;
+    top: 50% !important;
+    width: 260px !important;
+    height: 260px !important;
+    margin-left: -130px;
+    margin-top: -130px;
+    border-radius: 28px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, .45);
+}
+
+#chatProfileZoom.active .zoom-status {
+    opacity: 1;
+}
+
+.login-notice {
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 9999;
+
+    animation: noticeIn .25s ease;
+
+}
+
+
+
+.notice-box {
+
+    background: #202c33;
+
+    color: white;
+
+    width: 280px;
+
+    padding: 25px;
+
+    border-radius: 15px;
+
+    text-align: center;
+
+}
+
+
+.notice-box p {
+
+    font-size: 16px;
+
+    margin-bottom: 20px;
+
+    font-weight: 600;
+
+    color: whitesmoke;
+
+}
+
+
+
+.notice-box button {
+
+    background: #25d366;
+
+    border: none;
+
+    color: white;
+
+    padding: 10px 35px;
+
+    border-radius: 20px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+
+.login-notice.hide {
+
+    animation: noticeOut .3s ease forwards;
+
+}
+
+
+
+@keyframes noticeIn {
+
+    from {
+
+        opacity: 0;
+        transform: scale(.8);
+
+    }
+
+    to {
+
+        opacity: 1;
+        transform: scale(1);
+
+    }
+
+}
+
+
+
+@keyframes noticeOut {
+
+    from {
+
+        opacity: 1;
+        transform: scale(1);
+
+    }
+
+    to {
+
+        opacity: 0;
+        transform: scale(.8);
+
+    }
+
+}
+

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>WomenClub Admin</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+    <div class="admin-dashboard">
+
+
+
+        <!-- =========================
+CHAT LIST
+========================= -->
+
+        <aside class="admin-users">
+
+
+            <header class="admin-header">
+
+
+                <div class="admin-avatar">
+
+                    W
+
+                </div>
+
+
+                <div>
+
+                    <h2>
+                        WomenClub
+                    </h2>
+
+                    <p>
+                        Admin Dashboard
+                    </p>
+
+                </div>
+
+
+            </header>
+
+
+
+
+            <div class="search-box">
+
+                <input id="searchUsers" placeholder="Search conversations...">
+
+            </div>
+
+
+
+
+            <div id="usersList" class="users-list">
+
+
+                <div class="empty">
+
+                    Waiting for messages...
+
+                </div>
+
+
+            </div>
+
+
+
+        </aside>
+
+
+
+
+
+
+
+
+
+        <!-- =========================
+ADMIN CHAT WINDOW
+========================= -->
+
+
+        <section class="admin-chat">
+
+
+
+            <header class="admin-chat-header">
+
+
+                <div class="customer-profile">
+
+
+
+                    <div class="customer-avatar">
+
+                        <img id="customerImage" src="https://i.pravatar.cc/100?img=52">
+
+                    </div>
+
+
+
+
+                    <div>
+
+
+                        <h3 id="customerName">
+
+                            Select Conversation
+
+                        </h3>
+
+
+                        <span id="customerPhone">
+
+                            No chat selected
+
+                        </span>
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+                <div class="admin-actions">
+
+                    ⋮
+
+                </div>
+
+
+
+            </header>
+
+
+
+
+
+
+
+            <div id="adminMessages" class="admin-messages">
+
+
+
+                <div class="empty-chat">
+                    
+                </div>
+
+
+
+            </div>
+            <footer class="admin-input-area">
+
+
+
+                <div class="message-box">
+
+
+
+                    <button class="emoji-btn">
+
+                        ☺
+
+                    </button>
+
+                    <input id="adminMessageInput" placeholder="Reply message..." autocomplete="off">
+
+
+
+                </div>
+
+
+
+
+                <button id="adminSend">
+
+                    ➤
+
+                </button>
+
+
+
+            </footer>
+
+
+
+
+
+
+        </section>
+
+
+
+
+
+    </div>
+
+    <script type="module" src="admin.js"></script>
+
+
+</body>
+
+</html>
