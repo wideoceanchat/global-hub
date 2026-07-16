@@ -64,98 +64,65 @@ const db = getFirestore(app);
 // // DEVICE LOGIN LOCK SYSTEM
 // // =====================================
 
-// const deviceKey =
-// "globalHubDevice";
+const deviceKey = "womenclubLockedPhone";
 
+function getDeviceId(){
 
-// // CREATE DEVICE ID
+    let id = localStorage.getItem("womenclubDeviceId");
 
-// function getDeviceId(){
+    if(!id){
 
-// let id =
-// localStorage.getItem("globalHubDeviceId");
+        id =
+        "device_" +
+        Date.now() +
+        "_" +
+        Math.random().toString(36).substring(2);
 
+        localStorage.setItem(
+            "womenclubDeviceId",
+            id
+        );
 
-// if(!id){
+    }
 
-// id =
-// "device_" +
-// Date.now() +
-// "_" +
-// Math.random()
-// .toString(36)
-// .substring(2);
+    return id;
 
+}
 
-// localStorage.setItem(
-// "globalHubDeviceId",
-// id
-// );
+function checkDeviceAccount(phone){
 
-// }
+    const savedPhone =
+    localStorage.getItem(deviceKey);
 
+    if(!savedPhone){
+        return true;
+    }
 
-// return id;
+    if(savedPhone === phone){
+        return true;
+    }
 
-// }
+    showLoginNotice(
+        "You already have an existing account on this device. Please enter your previous phone number."
+    );
 
+    return false;
 
-// // CHECK DEVICE ACCOUNT
+}
 
-// function checkDeviceAccount(phone){
+function saveDeviceAccount(phone){
 
+    localStorage.setItem(
+        deviceKey,
+        phone
+    );
 
-// const saved =
-// localStorage.getItem(deviceKey);
+    localStorage.setItem(
+        "womenclubDeviceId",
+        getDeviceId()
+    );
 
-
-// if(!saved){
-
-// return true;
-
-// }
-
-
-// // DEVICE HAS ACCOUNT
-
-// if(saved === phone){
-
-// return true;
-
-// }
-
-
-// // DIFFERENT NUMBER BLOCK
-
-// showLoginNotice(
-// "You have an existing account. Please enter your previous number."
-// );
-
-
-// return false;
-
-// }
-
-
-
-// // SAVE FIRST LOGIN
-
-// function saveDeviceAccount(phone){
-
-
-// localStorage.setItem(
-// deviceKey,
-// phone
-// );
-
-
-// localStorage.setItem(
-// "globalHubDevice",
-// getDeviceId()
-// );
-
-
-// }
+}
 
 // =====================================
 // VARIABLES
@@ -791,35 +758,17 @@ if(startChat){
 startChat.onclick = async()=>{
 
 
-const phone =
-phoneInput.value.trim();
+const phone = phoneInput.value.trim();
+const cleanPhone = phone.replace(/\D/g,"");
 
-
-// PHONE NUMBER VALIDATION
-
-const cleanPhone =
-phone.replace(/\D/g,"");
-
-
-if(!cleanPhone){
-
-showLoginNotice("Please enter your phone number");
-return;
-
-return;
-
+if(cleanPhone.length === 0){
+    showLoginNotice("Please enter your phone number.");
+    return;
 }
 
-
-// ONLY ACCEPT 10 OR 11 DIGITS
-
-if(cleanPhone.length !== 10 && cleanPhone.length !== 11){
-
-showLoginNotice("Phone number must be 10 or 11 digits");
-return;
-
-return;
-
+if(cleanPhone.length < 10 || cleanPhone.length > 11){
+    showLoginNotice("Please enter your 10 digits or 11 digits phone number.");
+    return;
 }
 
 
@@ -841,27 +790,23 @@ return;
 // saveDeviceAccount(cleanPhone);
 
 
-localStorage.setItem(
-"womenclubPhone",
-cleanPhone
-);
+if(!checkDeviceAccount(cleanPhone)){
+    return;
+}
 
+userPhone = cleanPhone;
 
-
-userPhone = phone;
-
+saveDeviceAccount(cleanPhone);
 
 localStorage.setItem(
-"womenclubPhone",
-phone
+    "womenclubPhone",
+    cleanPhone
 );
 
 
 // CHECK SPECIAL NUMBER FIRST
 
 await checkSpecialNumber(phone);
-
-
 
 await setDoc(
 doc(db,"users",phone),
@@ -884,16 +829,11 @@ merge:true
 
 );
 
-
-
 loginBox.style.display="none";
-
 
 contactsContainer.style.display="flex";
 
-
 loadContacts();
-
 
 };
 
@@ -903,10 +843,8 @@ function updateChatHeaderStatus() {
 
     if (!currentProfileData) return;
 
-
     const status =
     document.getElementById("chatProfileStatus");
-
 
     if (!status) return;
 
