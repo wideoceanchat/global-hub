@@ -3698,3 +3698,33 @@ body {
 
 }
 
+.install-app {
+
+    display: none;
+
+    position: fixed;
+
+    bottom: 90px;
+
+    right: 20px;
+
+    padding: 12px 18px;
+
+    background: #25d366;
+
+    color: #000;
+
+    font-weight: bold;
+
+    border: none;
+
+    border-radius: 30px;
+
+    cursor: pointer;
+
+    z-index: 9999;
+
+    -webkit-tap-highlight-color: transparent;
+
+}
+

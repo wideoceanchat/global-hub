@@ -3128,3 +3128,29 @@ function showLoginNotice(message){
 
 
 }
+
+let deferredPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+
+e.preventDefault();
+
+deferredPrompt = e;
+
+document.getElementById("installApp").style.display = "block";
+
+});
+
+document.getElementById("installApp").onclick = async () => {
+
+if (!deferredPrompt) return;
+
+deferredPrompt.prompt();
+
+await deferredPrompt.userChoice;
+
+deferredPrompt = null;
+
+document.getElementById("installApp").style.display = "none";
+
+};
