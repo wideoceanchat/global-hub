@@ -10,27 +10,9 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <link rel="manifest" href="manifest.json">
-    
-    <meta name="theme-color" content="#111b21">
-    
-    <meta name="mobile-web-app-capable" content="yes">
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <meta name="apple-mobile-web-app-title" content="Global-Hub">
-    
-    <link rel="apple-touch-icon" href="icon-192.png">
-
 </head>
 
 <body>
-
-    <button id="installApp" class="install-app">
-        Install App
-    </button>
 
     <div class="mobile-chat">
 
@@ -62,65 +44,65 @@ CONTACTS SCREEN
 
             <header class="contacts-header">
 
-               <h2>
+                <h2>
                     Global-Hub
-               </h2>
+                </h2>
 
-               <div class="header-icons"></div>
+                <div class="header-icons"></div>
 
-               </header>
+            </header>
 
-               <div class="contacts-title">
+            <div class="contacts-title">
 
-               Contacts
+                Contacts
 
             </div>
 
             <div class="contacts-list" id="contactsList">
-            
+
             </div>
-        
+
             <div class="contacts-encryption">
-            
+
                 🔒 Your personal messages are <span>end-to-end encrypted</span>
-            
+
             </div>
 
         </div>
 
         <header class="chat-top" id="chatTop" style="display:none;">
 
-        <div class="profile-area">
-        
-            <button id="backToContacts" class="back-btn">
-        
-                ←
-        
-            </button>
-        
-    <div class="profile-image" id="openProfile">
-    
-    <div id="chatProfileImage"></div>
-    
-    </div>
-        
-            <div class="profile-info">
-        
-                <h3 id="chatProfileName">
-        
-                    Global-Hub
-        
-                </h3>
-        
-                <small id="chatProfileStatus">
-        
-                    
-        
-                </small>
-        
+            <div class="profile-area">
+
+                <button id="backToContacts" class="back-btn">
+
+                    ←
+
+                </button>
+
+                <div class="profile-image" id="openProfile">
+
+                    <div id="chatProfileImage"></div>
+
+                </div>
+
+                <div class="profile-info">
+
+                    <h3 id="chatProfileName">
+
+                        Global-Hub
+
+                    </h3>
+
+                    <small id="chatProfileStatus">
+
+
+
+                    </small>
+
+                </div>
+
             </div>
-        
-        </div>
 
             <div class="top-icons">
 
@@ -131,17 +113,17 @@ CONTACTS SCREEN
         <div class="chat-container" id="chatContainer" style="display:none;">
 
             <div id="chatImagePreview">
-            
+
                 <img id="chatImagePreviewImg">
-            
+
                 <div id="chatImageStatus">
-                    
+
                 </div>
-            
+
             </div>
 
             <div class="messages" id="messages">
-        
+
                 <div class="security-notice">
 
                     🔒 Messages and calls are end-to-end encrypted.
@@ -158,19 +140,19 @@ CONTACTS SCREEN
             </div>
 
             <div id="balanceNotice" class="balance-notice" style="display:none;">
-            
+
                 <p>
                     Your Balance Is
                 </p>
-            
+
                 <h2>
                     NGN 0.00
                 </h2>
-            
+
                 <button id="rechargeButton" onclick="showRechargeCard()">
                     Recharge
                 </button>
-            
+
             </div>
 
             <div class="typing-area">
@@ -184,7 +166,7 @@ CONTACTS SCREEN
                     </button>
 
                     <input id="messageInput" placeholder="Type a message..." autocomplete="off">
-                
+
                 </div>
 
                 <button id="sendMessage">
@@ -203,157 +185,149 @@ CONTACTS SCREEN
     </div>
 
     <div id="profileViewer">
-    
-    
+
+
         <button id="closeProfile">
             ×
         </button>
 
         <div id="mainProfileViewer">
-        
-        
-        <div id="mainDisplayImage"></div>
-        
-        
+
+
+            <div id="mainDisplayImage"></div>
+
+
             <div id="smallSwitchImage">
-        
+
                 <div id="switchImage"></div>
-        
+
             </div>
 
         </div>
 
-    <div class="profile-status">
-    
-        Online
-    
-    </div>
-    
-    
-    <h2 id="profileName"></h2>
-    
-    
-    <p id="profileBio"></p>
-    
-    
-    <div id="profileHobbies"></div>
+        <div class="profile-status">
+
+            Online
+
+        </div>
+
+
+        <h2 id="profileName"></h2>
+
+
+        <p id="profileBio"></p>
+
+
+        <div id="profileHobbies"></div>
 
     </div>
 
     <div id="rechargeOverlay" class="recharge-overlay">
-    
+
         <div class="recharge-card">
-    
+
             <button class="recharge-close" onclick="closeRechargeCard()">
                 ←
             </button>
-    
-    
+
+
             <h2>
                 Subscribe Now!
             </h2>
-    
-    
+
+
             <div class="recharge-item">
-    
+
                 <span>
                     Amount
                 </span>
-    
+
                 <strong>
                     ₦950
                 </strong>
-    
+
             </div>
-    
-    
+
+
             <div class="recharge-item">
-            
+
                 <span>
                     Account Number
                 </span>
-            
+
                 <div class="account-copy">
-            
+
                     <strong id="accountNumber">
-            
+
                         7070653390
-            
+
                     </strong>
-            
+
                     <button class="copy-btn" onclick="copyAccountNumber()">
-                    
+
                         Copy
-                    
+
                     </button>
-            
+
                 </div>
-            
+
             </div>
-    
-    
+
+
             <div class="recharge-item">
-    
+
                 <span>
                     Bank Name
                 </span>
-    
+
                 <strong>
                     Opay
                 </strong>
-    
+
             </div>
-    
-    
+
+
             <div class="recharge-item">
-    
+
                 <span>
                     Vendor Account Name
                 </span>
-    
+
                 <strong>
                     Paul Onyibor
                 </strong>
-    
+
             </div>
-    
-    
-        <div class="payment-done">
-        
-            Subscribe to continue
-        
+
+
+            <div class="payment-done">
+
+                Subscribe to continue
+
+            </div>
+
+
         </div>
-    
-    
-        </div>
-    
+
     </div>
 
     <!-- FULL PROFILE IMAGE VIEWER -->
-    
+
     <div id="imageViewer">
-    
-    
+
+
         <span id="closeImageViewer">
             ×
         </span>
-    
-    
+
+
         <img id="fullProfileImage">
-    
-    
+
+
     </div>
 
     <script type="module" src="app.js"></script>
-
-    <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker.register("./service-worker.js");
-            });
-        }
-    </script>
-
+    
 </body>
 
 </html>

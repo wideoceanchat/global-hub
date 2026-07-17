@@ -1,10 +1,3 @@
-// =====================================
-// WOMENCLUB CHAT ENGINE
-// APP.JS
-// DROP 1/3
-// FIREBASE + USER LOGIN + CONVERSATION SETUP
-// =====================================
-
 
 import { initializeApp } from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -3128,29 +3121,3 @@ function showLoginNotice(message){
 
 
 }
-
-let deferredPrompt = null;
-
-window.addEventListener("beforeinstallprompt", (e) => {
-
-e.preventDefault();
-
-deferredPrompt = e;
-
-document.getElementById("installApp").style.display = "block";
-
-});
-
-document.getElementById("installApp").onclick = async () => {
-
-if (!deferredPrompt) return;
-
-deferredPrompt.prompt();
-
-await deferredPrompt.userChoice;
-
-deferredPrompt = null;
-
-document.getElementById("installApp").style.display = "none";
-
-};
