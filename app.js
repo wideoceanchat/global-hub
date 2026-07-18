@@ -986,12 +986,8 @@ document.getElementById("chatTop").style.display="flex";
 const chatImg =
 document.getElementById("chatProfileImage");
 
-
-if(profile.image){
-
 chatImg.src = profile.image;
-
-}
+document.getElementById("chatProfileName").textContent = profile.name;
 
 updateChatHeaderStatus();
 
