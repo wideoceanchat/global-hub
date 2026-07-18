@@ -133,6 +133,9 @@ let currentProfileData = null;
 
 let typingTimer = null;
 
+let unsubscribeAdminStatus = null;
+
+let unsubscribeMessages = null;
 
 // =====================================
 // MESSAGE EDIT SYSTEM
@@ -583,14 +586,13 @@ async function loadContacts(){
 
                 const data = snap.data();
 
-                unreadCount = data.lastSender === "admin"
-?
-(data.unread || 0)
-:
-0;
+              // Only count unread ADMIN messages
+            unreadCount = data.lastSender === "admin"
+           ? (data.unread || 0)
+           : 0;
 
 
-lastMessage = data.lastMessage || "";
+            lastMessage = data.lastMessage || "";
 
             }
 
@@ -603,63 +605,39 @@ lastMessage = data.lastMessage || "";
         const item = document.createElement("div");
 
         item.className = "contact-item";
-
-        item.innerHTML = `
-
-        <div class="contact-image">
-
-            <img src="${profile.image}" onerror="fixImageError(this)">
-
-        </div>
-
-        <div class="contact-details">
-
-            <h3>${profile.name}</h3>
-
-            <p class="${
-                profile.status === "online"
-                ? "online-text"
-                : "offline-text"
-            }">
-
-                ${
-                    profile.status === "online"
-                    ? "Online"
-                    : "Last seen today at " + profile.lastSeen
-                }
-
-            </p>
-
-            ${
-lastMessage
-?
-`
-<p class="last-message">
-${lastMessage}
-</p>
-`
-:
-""
-}
-
-           ${
-    unreadCount > 0
-    ?
-
-`
-<div class="unread-badge">
-${unreadCount}
+item.innerHTML = `
+<div class="contact-image">
+    <img src="${profile.image}" onerror="fixImageError(this)">
 </div>
-`
 
-:
+<div class="contact-details">
+    <h3>${profile.name}</h3>
 
-""
+    <p class="${
+        profile.status === "online"
+        ? "online-text"
+        : "offline-text"
+    }">
+        ${
+            profile.status === "online"
+            ? "Online"
+            : "Last seen today at " + profile.lastSeen
+        }
+    </p>
+
+    ${
+        lastMessage
+        ? `<p class="last-message">${lastMessage}</p>`
+        : ""
+    }
+</div>
+
+${
+    unreadCount > 0
+    ? `<div class="unread-badge">${unreadCount}</div>`
+    : ""
 }
-
-        </div>
-
-        `;
+`;
 
         item.onclick = () => {
 
@@ -734,17 +712,8 @@ loadContacts();
 
 updateChatHeaderStatus();
 
-
 }
 
-
-
-
-// RANDOM REALISTIC STATUS CHANGES
-
-// =====================================
-// LOGIN
-// =====================================
 
 if(startChat){
 
@@ -827,6 +796,8 @@ loginBox.style.display="none";
 contactsContainer.style.display="flex";
 
 loadContacts();
+
+listenUnreadMessages();
 
 };
 
@@ -945,6 +916,8 @@ profileImage:profile.image,
 
 lastMessage:"",
 
+unread:0,
+
 updatedAt:serverTimestamp(),
 
 createdAt:serverTimestamp()
@@ -964,7 +937,7 @@ merge:true
 currentConversation =
 conversationId;
 
-await updateDoc(
+await setDoc(
 
 doc(
 db,
@@ -974,7 +947,17 @@ currentConversation
 
 {
 
-unread:0
+unread:0,
+
+lastRead:true,
+
+lastOpenedAt:serverTimestamp()
+
+},
+
+{
+
+merge:true
 
 }
 
@@ -1006,11 +989,7 @@ document.getElementById("chatProfileImage");
 
 if(profile.image){
 
-chatImg.innerHTML = `
-
-<img src="${profile.image}">
-
-`;
+chatImg.src = profile.image;
 
 }
 
@@ -1030,64 +1009,44 @@ listenAdminTyping();
 
 function listenForAdminStatus(){
 
+if(unsubscribeAdminStatus){
+unsubscribeAdminStatus();
+}
+
 if(!currentConversation) return;
 
 
-onSnapshot(
-
-doc(
-db,
-"conversations",
-currentConversation
-),
-
+unsubscribeAdminStatus = onSnapshot(
+doc(db,"conversations",currentConversation),
 (snapshot)=>{
 
-
 const data = snapshot.data();
-
 
 if(!data) return;
 
 
-
-// ONLY ADMIN REPLY MAKES ONLINE
-
 if(data.adminReply === true){
 
-
-currentProfileData.status = "online";
-
-currentProfileData.lastSeen = null;
-
+currentProfileData.status="online";
+currentProfileData.lastSeen=null;
 
 updateChatHeaderStatus();
 
-
 }
 
-
-// AFTER 3 MINUTES GO OFFLINE
 
 if(data.adminReply === false){
 
-
-currentProfileData.status = "offline";
-
-currentProfileData.lastSeen = getRandomLastSeen();
-
+currentProfileData.status="offline";
+currentProfileData.lastSeen=getRandomLastSeen();
 
 updateChatHeaderStatus();
 
-
 }
-
-
 
 }
 
 );
-
 
 }
 
@@ -1142,7 +1101,11 @@ orderBy("time")
 
 
 
-onSnapshot(q,(snapshot)=>{
+if(unsubscribeMessages){
+    unsubscribeMessages();
+}
+
+unsubscribeMessages = onSnapshot(q,(snapshot)=>{
 
 
 messages.innerHTML = `
@@ -1700,9 +1663,6 @@ read:false
 );
 
 
-
-
-
 await setDoc(
 
 doc(
@@ -1723,9 +1683,9 @@ lastTime:serverTimestamp(),
 
 updatedAt:serverTimestamp(),
 
-unread:increment(1),
+adminReply:false,
 
-adminReply:false
+unread:0
 
 },
 
@@ -2290,23 +2250,25 @@ async function markMessagesAsRead(){
 
     // REMOVE WHATSAPP STYLE BADGE
 
-    await updateDoc(
+  await updateDoc(
 
-        doc(
-            db,
-            "conversations",
-            currentConversation
-        ),
+doc(
+db,
+"conversations",
+currentConversation
+),
 
-        {
+{
 
-            unread:0,
+unread:0,
 
-            lastRead:true
+lastRead:true,
 
-        }
+lastOpenedAt:serverTimestamp()
 
-    );
+}
+
+);
 
 
 }
@@ -3053,7 +3015,6 @@ return;
 
 }else{
 
-
 updateChatHeaderStatus();
 
 
@@ -3119,5 +3080,76 @@ function showLoginNotice(message){
 
     };
 
+
+}
+
+// =====================================
+// REAL TIME UNREAD BADGE LISTENER
+// =====================================
+
+function listenUnreadMessages(){
+
+    if(!userPhone) return;
+
+    const q = query(
+        collection(db,"conversations"),
+        where("phone","==",userPhone)
+    );
+
+    onSnapshot(q,(snapshot)=>{
+
+        snapshot.forEach((docSnap)=>{
+
+            const data = docSnap.data();
+
+            const cards =
+            document.querySelectorAll(".contact-item");
+
+            cards.forEach(card=>{
+
+                const name =
+                card.querySelector("h3");
+
+                if(!name) return;
+
+                if(name.textContent !== data.profile) return;
+
+                let badge =
+                card.querySelector(".unread-badge");
+
+                const count =
+                data.lastSender === "admin"
+                    ? (data.unread || 0)
+                    : 0;
+
+                if(count > 0){
+
+                    if(!badge){
+
+                        badge =
+                        document.createElement("div");
+
+                        badge.className =
+                        "unread-badge";
+
+                        card.appendChild(badge);
+
+                    }
+
+                    badge.textContent = count;
+
+                }else{
+
+                    if(badge){
+                        badge.remove();
+                    }
+
+                }
+
+            });
+
+        });
+
+    });
 
 }

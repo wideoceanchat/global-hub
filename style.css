@@ -755,10 +755,15 @@ div {
 .admin-users {
 
     width: 340px;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
 
     background: #202c33;
+    color: #fff;
 
-    color: white;
+    overflow: hidden;
 
 }
 
@@ -775,6 +780,8 @@ div {
     gap: 12px;
 
     padding: 15px;
+
+    flex-shrink: 0;
 
 }
 
@@ -797,14 +804,15 @@ div {
 }
 
 
-
-
 .search-box {
+
+    flex-shrink: 0;
 
     padding: 12px;
 
-}
+    background: #202c33;
 
+}
 
 
 .search-box input {
@@ -825,30 +833,58 @@ div {
 
 .users-list {
 
+    flex: 1;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
     padding: 10px;
+
+    min-height: 0;
+
+    scrollbar-width: thin;
 
 }
 
+.users-list::-webkit-scrollbar-thumb {
 
+    background: #4b5c66;
+
+    border-radius: 20px;
+
+}
+
+.users-list::-webkit-scrollbar {
+
+    width: 6px;
+
+}
+
+.users-list::-webkit-scrollbar-track {
+
+    background: transparent;
+
+}
 
 
 .user-card {
 
     background: #2a3942;
 
-    color: white;
-
-    padding: 15px;
+    color: #fff;
 
     margin-bottom: 8px;
 
-    border-radius: 5px;
+    border-radius: 8px;
 
     cursor: pointer;
 
+    overflow: hidden;
+
+    transition: .2s;
+
 }
-
-
 
 .user-card:hover {
 
@@ -856,9 +892,11 @@ div {
 
 }
 
+.user-card.active-chat {
 
+    background: #075e54;
 
-
+}
 
 /* CHAT SIDE */
 
@@ -3725,4 +3763,24 @@ body {
 
     -webkit-tap-highlight-color: transparent;
 
+}
+
+.contact-item {
+    position: relative;
+}
+
+.unread-badge {
+    position: absolute;
+    top: 20px;
+    right: 16px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: bold;
 }
