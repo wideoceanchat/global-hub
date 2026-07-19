@@ -790,6 +790,7 @@ if(!userSnap.exists()){
 
         listenUnreadMessages();
 
+
     }catch(error){
 
         console.error(error);
@@ -1429,7 +1430,7 @@ return false;
 
 // AFTER ADMIN UNLOCK
 
-if(userMessages >= 18){
+if(userMessages >= 10){
 
     await updateDoc(
 
@@ -1452,8 +1453,6 @@ if(userMessages >= 18){
     return true;
 
 }
-
-
 
 return false;
 
