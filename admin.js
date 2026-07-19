@@ -1,12 +1,4 @@
 
-// =====================================
-// WOMENCLUB ADMIN ENGINE
-// ADMIN.JS
-// DROP 1/3
-// FIREBASE + CONVERSATION INBOX
-// =====================================
-
-
 import { initializeApp } from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
@@ -25,6 +17,7 @@ serverTimestamp,
 getDocs,
 getDoc,
 updateDoc,
+deleteDoc,
 increment
 
 } from
@@ -40,7 +33,7 @@ increment
 
 const firebaseConfig = {
 
-apiKey: "AIzaVoKXn4Lg4IoexDKDteNSAI",
+apiKey: "AIzaVoKXn4LgW6Wp0q4ml4IoexDKDteNSAI",
 
 authDomain: "womenclub-dfd51.firebaseapp.com",
 
@@ -99,7 +92,8 @@ document.getElementById("customerImage");
 
 let selectedConversation = "";
 
-
+let adminEditingMessageRef = null;
+let adminLongPressTimer = null;
 
 // =====================================
 // LOAD ALL CONVERSATIONS
@@ -437,7 +431,13 @@ async function markMessagesRead(conversationId){
 }
 
 
+let unsubscribeAdminMessages = null;
+
 function loadAdminMessages(conversationId){
+
+    if(unsubscribeAdminMessages){
+        unsubscribeAdminMessages();
+    }
 
 // MARK CHAT AS READ
 
@@ -568,7 +568,49 @@ minute:"2-digit"
 
 adminMessages.appendChild(bubble);
 
+bubble.addEventListener("mousedown",()=>{
 
+    adminLongPressTimer = setTimeout(()=>{
+
+        showAdminEditOption(
+            item.id,
+            data.text
+        );
+
+    },700);
+
+});
+
+bubble.addEventListener("mouseup",()=>{
+
+    clearTimeout(adminLongPressTimer);
+
+});
+
+bubble.addEventListener("mouseleave",()=>{
+
+    clearTimeout(adminLongPressTimer);
+
+});
+
+bubble.addEventListener("touchstart",()=>{
+
+    adminLongPressTimer = setTimeout(()=>{
+
+        showAdminEditOption(
+            item.id,
+            data.text
+        );
+
+    },700);
+
+});
+
+bubble.addEventListener("touchend",()=>{
+
+    clearTimeout(adminLongPressTimer);
+
+});
 
 });
 
@@ -607,24 +649,21 @@ adminSend.onclick = async()=>{
 
     }
 
-    await addDoc(
-
-        collection(
-            db,
-            "conversations",
-            selectedConversation,
-            "messages"
-        ),
-
-        {
-
-            sender:"admin",
-            text:text,
-            time:serverTimestamp()
-
-        }
-
-    );
+  await addDoc(
+collection(
+db,
+"conversations",
+selectedConversation,
+"messages"
+),
+{
+    sender:"admin",
+    text:text,
+    time:serverTimestamp(),
+    read:false,
+    delivered:true
+}
+);
 
     const conversationRef =
     doc(
@@ -1335,5 +1374,132 @@ adminTyping:false
 
 });
 
+
+}
+
+function showAdminEditOption(messageId,text){
+
+    const old =
+    document.querySelector(".admin-edit-message-box");
+
+    if(old){
+        old.remove();
+    }
+
+    const box =
+    document.createElement("div");
+
+    box.className =
+    "edit-message-box admin-edit-message-box";
+
+    box.innerHTML = `
+
+        <div class="edit-title">
+            Edit Message
+        </div>
+
+        <input
+        id="adminEditInput"
+        value="${text}"
+        >
+
+        <button id="adminSaveEdit">
+            Save
+        </button>
+
+        <button id="adminDeleteMessage">
+            Delete
+        </button>
+
+        <button id="adminCancelEdit">
+            Cancel
+        </button>
+
+    `;
+
+    document.body.appendChild(box);
+
+    adminEditingMessageRef = doc(
+        db,
+        "conversations",
+        selectedConversation,
+        "messages",
+        messageId
+    );
+
+    document.getElementById("adminSaveEdit").onclick = async()=>{
+
+        const value =
+        document.getElementById("adminEditInput")
+        .value.trim();
+
+        if(!value){
+            return;
+        }
+
+        await updateDoc(
+            adminEditingMessageRef,
+            {
+                text:value,
+                edited:true,
+                editedAt:serverTimestamp()
+            }
+        );
+
+        box.remove();
+
+    };
+
+    document.getElementById("adminDeleteMessage").onclick = async()=>{
+
+    await deleteDoc(adminEditingMessageRef);
+
+    const snap = await getDocs(
+        query(
+            collection(
+                db,
+                "conversations",
+                selectedConversation,
+                "messages"
+            ),
+            orderBy("time","desc")
+        )
+    );
+
+    if(!snap.empty){
+
+        const last = snap.docs[0].data();
+
+        await updateDoc(
+            doc(db,"conversations",selectedConversation),
+            {
+                lastMessage:last.text,
+                lastSender:last.sender,
+                updatedAt:serverTimestamp()
+            }
+        );
+
+    }else{
+
+        await updateDoc(
+    doc(db,"conversations",selectedConversation),
+    {
+        lastMessage:"",
+        lastSender:"",
+        updatedAt:serverTimestamp()
+    }
+);
+
+    }
+
+    box.remove();
+
+};
+
+    document.getElementById("adminCancelEdit").onclick = ()=>{
+
+        box.remove();
+
+    };
 
 }

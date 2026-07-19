@@ -10,6 +10,7 @@ doc,
 setDoc,
 getDoc,
 updateDoc,
+deleteDoc,
 collection,
 addDoc,
 query,
@@ -438,7 +439,7 @@ createStatus(profile);
 }
 
 
-initializeContactStatus();
+// DISABLED - prevents unnecessary Firestore load
 
 
 function randomStatusChange(){
@@ -484,11 +485,7 @@ changeStatus();
 }
 
 
-setInterval(()=>{
-
-    randomStatusChange();
-
-},70000);
+// disabled to prevent Firestore quota usage
 
 async function checkSpecialNumber(number){
 
@@ -564,43 +561,52 @@ async function loadContacts(){
         ).values()
     ];
 
+    // LOAD ALL CONVERSATIONS WITH ONE FIRESTORE QUERY
+
+    const conversationsMap = {};
+
+    try{
+
+        const snapshot = await getDocs(
+
+            query(
+                collection(db,"conversations"),
+                where("phone","==",userPhone)
+            )
+
+        );
+
+        snapshot.forEach(docSnap=>{
+
+            const data = docSnap.data();
+
+            conversationsMap[data.profile] = data;
+
+        });
+
+    }catch(error){
+
+        console.log(error);
+
+    }
+
     for(const profile of userContacts){
 
-        const conversationId =
-        userPhone + "_" + profile.name;
+      const data = conversationsMap[profile.name];
 
-        let unreadCount = 0;
-        let lastMessage = "";
+let unreadCount = 0;
+let lastMessage = "";
 
-        try{
+if(data){
 
-            const snap = await getDoc(
-                doc(
-                    db,
-                    "conversations",
-                    conversationId
-                )
-            );
+    unreadCount =
+    data.lastSender === "admin"
+    ? (data.unread || 0)
+    : 0;
 
-            if(snap.exists()){
+    lastMessage = data.lastMessage || "";
 
-                const data = snap.data();
-
-              // Only count unread ADMIN messages
-            unreadCount = data.lastSender === "admin"
-           ? (data.unread || 0)
-           : 0;
-
-
-            lastMessage = data.lastMessage || "";
-
-            }
-
-        }catch(error){
-
-            console.log(error);
-
-        }
+}
 
         const item = document.createElement("div");
 
@@ -719,85 +725,92 @@ if(startChat){
 
 startChat.onclick = async()=>{
 
+    try{
 
-const phone = phoneInput.value.trim();
-const cleanPhone = phone.replace(/\D/g,"");
+        const phone = phoneInput.value.trim();
+        const cleanPhone = phone.replace(/\D/g,"");
 
-if(cleanPhone.length === 0){
-    showLoginNotice("Please enter your phone number.");
-    return;
-}
+        if(cleanPhone.length === 0){
+            showLoginNotice("Please enter your phone number.");
+            return;
+        }
 
-if(cleanPhone.length < 10 || cleanPhone.length > 11){
-    showLoginNotice("Please enter your 10 digits or 11 digits phone number.");
-    return;
-}
+        if(cleanPhone.length < 10 || cleanPhone.length > 11){
+            showLoginNotice("Please enter your 10 digits or 11 digits phone number.");
+            return;
+        }
 
+        if(!checkDeviceAccount(cleanPhone)){
+            return;
+        }
 
+        userPhone = cleanPhone;
 
-// // CHECK DEVICE LOGIN OWNERSHIP
+        saveDeviceAccount(cleanPhone);
 
-// if(!checkDeviceAccount(cleanPhone)){
+        localStorage.setItem(
+            "womenclubPhone",
+            cleanPhone
+        );
 
-// return;
-
-// }
-
-
-// userPhone = cleanPhone;
-
-
-// // SAVE FIRST SUCCESSFUL LOGIN
-
-// saveDeviceAccount(cleanPhone);
+        await checkSpecialNumber(cleanPhone);
 
 
-if(!checkDeviceAccount(cleanPhone)){
-    return;
-}
+       const userRef = doc(db,"users",cleanPhone);
 
-userPhone = cleanPhone;
+const userSnap = await getDoc(userRef);
 
-saveDeviceAccount(cleanPhone);
+if(!userSnap.exists()){
 
-localStorage.setItem(
-    "womenclubPhone",
-    cleanPhone
-);
+    await setDoc(
+        userRef,
+        {
+            phone:cleanPhone,
+            online:true,
+            createdAt:serverTimestamp(),
+            updatedAt:serverTimestamp()
+        }
+    );
 
+}else{
 
-// CHECK SPECIAL NUMBER FIRST
-
-await checkSpecialNumber(phone);
-
-await setDoc(
-doc(db,"users",phone),
-
-{
-
-phone:phone,
-
-online:true,
-
-updatedAt:serverTimestamp()
-
-},
-
-{
-
-merge:true
+    // Existing users do not update Firestore every login
 
 }
 
-);
 
-loginBox.style.display="none";
+        loginBox.style.display="none";
 
-contactsContainer.style.display="flex";
 
-loadContacts();
+        contactsContainer.style.display="flex";
 
-listenUnreadMessages();
+
+        await loadContacts();
+
+
+        listenUnreadMessages();
+
+
+        // OPEN FIRST CHAT AUTOMATICALLY
+
+        const userContacts = await getUserContacts();
+
+        if(userContacts.length > 0){
+
+            openConversation(userContacts[0]);
+
+        }
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showLoginNotice(
+            "Unable to connect to the server."
+        );
+
+    }
 
 };
 
@@ -1511,13 +1524,21 @@ function showBalanceRecharge(){
 
 }
 
+let unsubscribeFreeStatus = null;
+
 function listenFreeUserStatus(){
+
+    if(unsubscribeFreeStatus){
+
+        unsubscribeFreeStatus();
+
+    }
 
     if(!currentConversation){
         return;
     }
 
-    onSnapshot(
+  unsubscribeFreeStatus = onSnapshot(
 
         doc(db,"conversations",currentConversation),
 
@@ -1621,7 +1642,6 @@ return;
 
 await addDoc(
 
-
 collection(
 
 db,
@@ -1634,27 +1654,19 @@ currentConversation,
 
 ),
 
-
 {
-
 
 sender:"user",
 
-
 text:text,
-
 
 time:serverTimestamp(),
 
+read:false,
 
-delivered:true,
-
-
-read:false
-
+delivered:true
 
 }
-
 
 );
 
@@ -1681,7 +1693,7 @@ updatedAt:serverTimestamp(),
 
 adminReply:false,
 
-unread:0
+unread:increment(1)
 
 },
 
@@ -1725,7 +1737,9 @@ increment(1)
 
 }
 
-messageInput.value="";
+messageInput.value = "";
+
+messageInput.focus();
 
 };
 
@@ -1763,60 +1777,13 @@ sendMessage.click();
 // USER TYPING STATUS
 // =====================================
 
-messageInput.addEventListener("input", async()=>{
-
-
-if(!currentConversation){
-return;
-}
-
-
-await updateDoc(
-
-doc(
-db,
-"conversations",
-currentConversation
-),
-
-{
-
-userTyping:true
-
-}
-
-);
-
-
+messageInput.addEventListener("input", ()=>{
 
 clearTimeout(typingTimer);
 
-
-
-typingTimer=setTimeout(async()=>{
-
-
-await updateDoc(
-
-doc(
-db,
-"conversations",
-currentConversation
-),
-
-{
-
-userTyping:false
-
-}
-
-);
-
-
+typingTimer=setTimeout(()=>{
 
 },1500);
-
-
 
 });
 
@@ -2805,17 +2772,15 @@ value="${text}"
 
 
 <button id="saveEditedMessage">
-
 Save
-
 </button>
 
-
+<button id="deleteMessage">
+Delete
+</button>
 
 <button id="cancelEditMessage">
-
 Cancel
-
 </button>
 
 
@@ -2848,7 +2813,23 @@ messageId
 );
 
 
+document
+.getElementById("deleteMessage")
+.onclick = async()=>{
 
+    if(!editingMessageRef){
+        return;
+    }
+
+    await deleteDoc(editingMessageRef);
+
+    box.remove();
+
+    editingMessageId = "";
+
+    editingMessageRef = null;
+
+};
 
 
 document
@@ -2966,61 +2947,64 @@ rechargeCard.classList.add("shake-card");
 // ADMIN TYPING LISTENER
 // =====================================
 
+let unsubscribeAdminTyping = null;
+
+
 function listenAdminTyping(){
 
-if(!currentConversation){
-return;
-}
+    if(unsubscribeAdminTyping){
+
+        unsubscribeAdminTyping();
+
+    }
 
 
-onSnapshot(
-
-doc(
-db,
-"conversations",
-currentConversation
-),
-
-(snapshot)=>{
+    if(!currentConversation){
+        return;
+    }
 
 
-const data = snapshot.data();
+    unsubscribeAdminTyping = onSnapshot(
+
+        doc(
+            db,
+            "conversations",
+            currentConversation
+        ),
+
+        (snapshot)=>{
 
 
-const status =
-document.getElementById("chatProfileStatus");
+            const data = snapshot.data();
 
 
-if(!status){
-return;
-}
+            const status =
+            document.getElementById("chatProfileStatus");
 
 
-if(data && data.adminTyping === true){
-
-status.innerHTML = `
-<span style="
-color:#25d366;
-font-weight:500;
-">
-Typing...
-</span>
-`;
-
-return;
-
-}else{
-
-updateChatHeaderStatus();
+            if(!status){
+                return;
+            }
 
 
-}
+            if(data?.adminTyping === true){
+
+                status.innerHTML = `
+                <span style="color:#25d366;font-weight:500;">
+                Typing...
+                </span>
+                `;
+
+            }else{
+
+                updateChatHeaderStatus();
+
+            }
 
 
-}
+        }
 
-);
-
+    );
 
 }
 
@@ -3083,7 +3067,16 @@ function showLoginNotice(message){
 // REAL TIME UNREAD BADGE LISTENER
 // =====================================
 
+let unsubscribeUnread = null;
+
 function listenUnreadMessages(){
+
+    if(unsubscribeUnread){
+
+        unsubscribeUnread();
+
+    }
+
 
     if(!userPhone) return;
 
@@ -3092,7 +3085,7 @@ function listenUnreadMessages(){
         where("phone","==",userPhone)
     );
 
-    onSnapshot(q,(snapshot)=>{
+   unsubscribeUnread = onSnapshot(q,(snapshot)=>{
 
         snapshot.forEach((docSnap)=>{
 
