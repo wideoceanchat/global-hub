@@ -1162,14 +1162,13 @@ document.createElement("div");
 
 if(data.type === "payment"){
 
-    // Hide old completed payments
+    // Don't show completed payments
     if(data.completed === true){
         return;
     }
 
     currentPaymentId = messageId;
 
-    // Remove any previous payment card
     const oldCard = messages.querySelector(".payment-card");
 
     if(oldCard){
@@ -1189,44 +1188,40 @@ if(data.type === "payment"){
     <div class="payment-success">
 
         <div class="payment-icon">
-            <div class="payment-circle">
-                ✓
-            </div>
+            <div class="payment-circle">✓</div>
         </div>
 
         <h2 class="payment-title">
-            Payment successful
+            Payment Successful
         </h2>
 
         <div class="payment-amount">
             ${symbol}${Number(data.amount).toLocaleString()}.00
         </div>
 
-       <div class="payment-description">
+        <div class="payment-description">
 
-    <strong>${currentProfileData.name}</strong>
-    has successfully transferred
+            <strong>${currentProfileData.name}</strong>
 
-    <strong>
-        ${symbol}${Number(data.amount).toLocaleString()}.00
-    </strong>
+            has successfully transferred
 
-    to
+            <strong>
+                ${symbol}${Number(data.amount).toLocaleString()}.00
+            </strong>
 
-    <strong>
-        +234${userPhone.replace(/^0/, "")}
-    </strong>
+            to
 
-   </div>
+            <strong>
+                +234${userPhone.replace(/^0/, "")}
+            </strong>
+
+        </div>
 
         <button
-    class="withdraw-btn"
-    onclick="openWithdrawCard(
-        '${symbol}${Number(data.amount).toLocaleString()}.00'
-    )"
-    >
-        Withdraw to Bank
-</button>
+            class="withdraw-btn"
+            onclick="openWithdrawCard('${symbol}${Number(data.amount).toLocaleString()}.00')">
+            Withdraw to Bank
+        </button>
 
     </div>
 
