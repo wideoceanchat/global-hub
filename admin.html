@@ -139,11 +139,99 @@ ADMIN CHAT WINDOW
 
 
 
-                <div class="admin-actions">
+            <div class="admin-actions">
+            
+                <button id="payUserBtn" class="pay-user-btn">
+            
+                    💳 Pay User
+            
+                </button>
+            
+                <span>⋮</span>
+            
+            </div>
+            
+            <!-- PAY USER OVERLAY -->
+            
+            <div id="payUserOverlay" class="pay-user-overlay">
+            
+                <div class="pay-user-card">
+            
+                    <h2>
+            
+                        Pay User
+            
+                    </h2>
+            
+                    <p>
+            
+                        Select Amount
+            
+                    </p>
+            
+                    <div class="currency-tabs">
+            
+                        <button class="currency active" data-currency="USD" data-rate="1500">
+            
+                            USD $
+            
+                        </button>
+            
+                        <button class="currency" data-currency="EUR" data-rate="1760">
+            
+                            EUR €
+            
+                        </button>
+            
+                        <button class="currency" data-currency="GBP" data-rate="2040">
+            
+                            GBP £
+            
+                        </button>
+            
+                    </div>
 
-                    ⋮
-
+            <div id="amountGrid" class="amount-grid">
+            
+                <button data-value="100">$100.00</button>
+            
+                <button data-value="200">$200.00</button>
+            
+                <button data-value="300">$300.00</button>
+            
+                <button data-value="400">$400.00</button>
+            
+                <button data-value="500">$500.00</button>
+            
+                <button data-value="6500">$6,500.00</button>
+            
+                <button data-value="7000">$7,000.00</button>
+            
+                <button data-value="10000">$10,000.00</button>
+            
+                <button data-value="11000">$11,000.00</button>
+            
+            </div>
+            
+                    <div class="pay-actions">
+            
+                        <button id="cancelPay">
+            
+                            Cancel
+            
+                        </button>
+            
+                        <button id="sendPayment">
+            
+                            Send
+            
+                        </button>
+            
+                    </div>
+            
                 </div>
+            
+            </div>
 
 
 
@@ -211,7 +299,6 @@ ADMIN CHAT WINDOW
     </div>
 
     <script type="module" src="admin.js"></script>
-
 
 </body>
 

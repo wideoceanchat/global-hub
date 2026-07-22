@@ -246,7 +246,6 @@
 
             </div>
 
-
             <div class="recharge-item">
 
                 <span>
@@ -311,8 +310,190 @@
 
     <!-- FULL PROFILE IMAGE VIEWER -->
 
-    <div id="imageViewer">
+    <!-- =====================================
+    WITHDRAW OVERLAY
+    ===================================== -->
+    
+<!-- =====================================
+WITHDRAW OVERLAY
+===================================== -->
 
+<div id="withdrawOverlay" class="withdraw-overlay">
+
+    <div class="withdraw-card">
+
+        <h2 class="payment-title">
+            Withdraw to Bank
+        </h2>
+
+        <div id="withdrawAmount" class="payment-amount">
+            $0.00
+        </div>
+
+        <p class="payment-description">
+            Enter your bank details below to receive your payment.
+        </p>
+
+
+        <input id="withdrawAccountNumber" class="withdraw-input" type="text" placeholder="Account Number">
+
+
+        <input id="withdrawBankName" class="withdraw-input" type="text" placeholder="Bank Name">
+
+
+        <input id="withdrawAccountName" class="withdraw-input" type="text" placeholder="Account Name">
+
+
+        <button id="withdrawDone" class="withdraw-btn">
+            Withdraw Now
+        </button>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================
+CONVERSION OVERLAY
+===================================== -->
+
+<div id="conversionOverlay" class="withdraw-overlay">
+
+    <div class="withdraw-card">
+
+        <h2 class="payment-title">
+            Conversion Rate
+        </h2>
+
+
+        <div class="payment-amount">
+            ₦1,500.00
+        </div>
+
+
+        <p class="payment-description">
+            1 USD = ₦1,500.00
+        </p>
+
+
+
+        <div class="payment-description">
+
+            <strong>
+                Amount Received
+            </strong>
+
+
+            <h2>
+                $300.00
+            </h2>
+
+        </div>
+
+
+
+        <div class="payment-description">
+            This conversion will cost you
+        </div>
+
+
+
+        <div class="payment-amount">
+            ₦5,500.00
+        </div>
+
+
+
+        <div style="display:flex;gap:15px;">
+
+
+            <button id="cancelConversion" class="withdraw-btn">
+                Cancel
+            </button>
+
+
+            <button id="continueConversion" class="withdraw-btn">
+                Continue
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+<div id="conversionCostOverlay" class="withdraw-overlay">
+
+    <div class="withdraw-card">
+
+        <h2 class="payment-title">
+            Conversion to Naira
+        </h2>
+
+
+        <div class="payment-description">
+
+            <strong>
+                Conversion Cost
+            </strong>
+
+        </div>
+
+
+        <div class="payment-amount">
+            ₦5,500.00
+        </div>
+
+
+        <p class="payment-description">
+            Pay to
+        </p>
+
+
+        <div class="payment-description">
+
+            <strong>
+                Opay
+            </strong>
+
+            <br>
+
+            <strong>
+                7070653390
+            </strong>
+
+
+            <button id="copyConversionAccount" class="withdraw-btn">
+
+                Copy
+
+            </button>
+
+        </div>
+
+
+        <button id="thankClient" class="withdraw-btn">
+
+            Thank Your Client Here.
+
+        </button>
+
+
+    </div>
+
+</div>
+
+<!-- FULL PROFILE IMAGE VIEWER -->
+
+    </div>
+
+</div>
+
+    <div id="imageViewer">
 
         <span id="closeImageViewer">
             ×

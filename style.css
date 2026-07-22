@@ -3784,3 +3784,550 @@ body {
     font-size: 12px;
     font-weight: bold;
 }
+
+/* =====================================
+PAYMENT BUTTON SELECTED
+===================================== */
+
+#amountGrid button.selected-payment {
+
+    background: #25d366;
+
+    color: #fff;
+
+    border: 2px solid #25d366;
+
+    transform: scale(1.05);
+
+}
+
+/*======================================
+PAYMENT CARD
+======================================*/
+
+.payment-card {
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    margin: 12px 0;
+
+}
+
+.payment-success {
+
+    width: 92%;
+
+    padding: 18px;
+
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, .12);
+
+    backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255, 255, 255, .18);
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .25);
+
+    text-align: center;
+
+}
+
+.payment-success h3 {
+
+    margin-bottom: 14px;
+
+    color: #25d366;
+
+}
+
+.payment-success p {
+
+    line-height: 1.6;
+
+}
+
+.withdraw-btn {
+
+    margin-top: 18px;
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: #25d366;
+
+    color: #fff;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+}
+
+/* ==============================
+PAY USER OVERLAY
+============================== */
+
+.pay-user-overlay {
+
+    position: fixed;
+    inset: 0;
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(5, 10, 20, .75);
+    backdrop-filter: blur(8px);
+
+    z-index: 9999;
+
+}
+
+
+.pay-user-card {
+
+    width: 430px;
+    max-width: 95%;
+
+    background: #0f172a;
+
+    border: 1px solid rgba(255, 255, 255, .08);
+
+    border-radius: 22px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, .55);
+
+    color: #fff;
+
+}
+
+
+.pay-user-card h2 {
+
+    margin: 0;
+    text-align: center;
+    font-size: 26px;
+
+}
+
+
+.pay-user-card p {
+
+    color: #94a3b8;
+    text-align: center;
+    margin: 10px 0 25px;
+
+}
+
+
+.currency-tabs {
+
+    display: flex;
+    gap: 10px;
+    margin-bottom: 22px;
+
+}
+
+
+.currency {
+
+    flex: 1;
+
+    border: none;
+
+    border-radius: 14px;
+
+    padding: 13px;
+
+    background: #172554;
+
+    color: #cbd5e1;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+
+.currency:hover {
+
+    background: #1e3a8a;
+
+}
+
+
+.currency.active {
+
+    background: #2563eb;
+
+    color: white;
+
+}
+
+
+.amount-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 14px;
+
+}
+
+
+.amount-grid button {
+
+    height: 60px;
+
+    border: none;
+
+    border-radius: 15px;
+
+    background: #111827;
+
+    color: white;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+
+.amount-grid button:hover {
+
+    transform: translateY(-2px);
+
+    background: #2563eb;
+
+}
+
+
+.amount-grid button.selected {
+
+    background: #22c55e;
+
+}
+
+
+.pay-actions {
+
+    display: flex;
+
+    gap: 15px;
+
+    margin-top: 28px;
+
+}
+
+
+.pay-actions button {
+
+    flex: 1;
+
+    height: 52px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+#cancelPay {
+
+    background: #1f2937;
+
+    color: #fff;
+
+}
+
+
+#sendPayment {
+
+    background: linear-gradient(90deg, #2563eb, #3b82f6);
+
+    color: white;
+
+}
+
+.pay-user-btn {
+
+    background: linear-gradient(90deg, #2563eb, #3b82f6);
+
+    color: white;
+
+    border: none;
+
+    border-radius: 12px;
+
+    padding: 10px 18px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+
+.pay-user-btn:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 20px rgba(37, 99, 235, .35);
+
+}
+
+.payment-card {
+    display: flex;
+    justify-content: center;
+    margin: 18px 12px;
+    animation: popCard .35s ease;
+}
+
+.payment-success {
+
+    width: 320px;
+
+    background: #fff;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, .18);
+
+    border: 1px solid #e7e7e7;
+
+    text-align: center;
+}
+
+.payment-icon {
+
+    padding-top: 24px;
+
+}
+
+.payment-circle {
+
+    width: 72px;
+
+    height: 72px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    color: #fff;
+
+    font-size: 40px;
+
+    font-weight: bold;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin: auto;
+
+    box-shadow: 0 10px 25px rgba(34, 197, 94, .35);
+
+}
+
+.payment-title {
+
+    margin-top: 18px;
+
+    font-size: 24px;
+
+    color: #222;
+
+    font-weight: 700;
+
+}
+
+.payment-amount {
+
+    margin-top: 18px;
+
+    font-size: 34px;
+
+    font-weight: 800;
+
+    color: #111;
+
+}
+
+.payment-description {
+
+    margin: 18px 28px;
+
+    color: #666;
+
+    font-size: 16px;
+
+    line-height: 1.7;
+
+}
+
+.withdraw-btn {
+
+    width: 100%;
+
+    border: none;
+
+    background: #0f9d58;
+
+    color: #fff;
+
+    padding: 18px;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+.withdraw-btn:hover {
+
+    background: #0c8649;
+
+}
+
+@keyframes popCard {
+
+    from {
+
+        transform: scale(.85);
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        transform: scale(1);
+
+        opacity: 1;
+
+    }
+
+}
+
+@media(max-width:600px) {
+
+    .payment-success {
+
+        width: 92%;
+        padding: 22px 18px;
+
+    }
+
+    .payment-amount {
+
+        font-size: 32px;
+
+    }
+
+}
+
+.withdraw-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .55);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 9999;
+}
+
+.withdraw-card {
+    width: 100%;
+    max-width: 360px;
+    background: #fff;
+    border-radius: 18px;
+    padding: 22px 20px;
+    text-align: center;
+    box-sizing: border-box;
+    animation: popup .25s ease;
+}
+
+.withdraw-input {
+    width: 100%;
+    height: 46px;
+    margin-top: 12px;
+    padding: 0 14px;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    font-size: 15px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.withdraw-input:focus {
+    border-color: #25d366;
+}
+
+.withdraw-btn {
+    width: 100%;
+    height: 46px;
+    margin-top: 18px;
+    border: none;
+    border-radius: 10px;
+    background: #25d366;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.payment-title {
+    margin: 10px 0 5px;
+    font-size: 22px;
+}
+
+.payment-amount {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.payment-description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}

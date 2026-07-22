@@ -122,11 +122,24 @@ function saveDeviceAccount(phone){
 // VARIABLES
 // =====================================
 
+let paymentCompleted = false;
+let currentPaymentId = "";
+
 let coverIndex = 0;
 
 let userPhone = "";
 
 let currentConversation = "";
+
+// =====================================
+// PAYMENT SYSTEM
+// =====================================
+
+let selectedPaymentAmount = null;
+
+let selectedCurrency = "USD";
+
+let selectedRate = 1500;
 
 let currentProfile = "";
 
@@ -1147,7 +1160,82 @@ item.data();
 const bubble =
 document.createElement("div");
 
+if(data.type === "payment"){
 
+    // Hide old completed payments
+    if(data.completed === true){
+        return;
+    }
+
+    currentPaymentId = messageId;
+
+    // Remove any previous payment card
+    const oldCard = messages.querySelector(".payment-card");
+
+    if(oldCard){
+        oldCard.remove();
+    }
+
+    const symbol = {
+        USD: "$",
+        EUR: "€",
+        GBP: "£"
+    }[data.currency] || data.currency;
+
+    bubble.className = "payment-card";
+
+    bubble.innerHTML = `
+
+    <div class="payment-success">
+
+        <div class="payment-icon">
+            <div class="payment-circle">
+                ✓
+            </div>
+        </div>
+
+        <h2 class="payment-title">
+            Payment successful
+        </h2>
+
+        <div class="payment-amount">
+            ${symbol}${Number(data.amount).toLocaleString()}.00
+        </div>
+
+       <div class="payment-description">
+
+    <strong>${currentProfileData.name}</strong>
+    has successfully transferred
+
+    <strong>
+        ${symbol}${Number(data.amount).toLocaleString()}.00
+    </strong>
+
+    to
+
+    <strong>
+        +234${userPhone.replace(/^0/, "")}
+    </strong>
+
+   </div>
+
+        <button
+    class="withdraw-btn"
+    onclick="openWithdrawCard(
+        '${symbol}${Number(data.amount).toLocaleString()}.00'
+    )"
+    >
+        Withdraw to Bank
+</button>
+
+    </div>
+
+    `;
+
+    messages.appendChild(bubble);
+
+    return;
+}
 
 if(data.sender==="user"){
 
@@ -1365,8 +1453,6 @@ currentConversation
 
 const data =
 snap.data() || {};
-
-
 
 const messagesSnap =
 await getDocs(
@@ -1626,8 +1712,7 @@ return;
 
 // SEND MESSAGE
 
-
-await addDoc(
+const newMessage = await addDoc(
 
 collection(
 
@@ -1657,6 +1742,36 @@ delivered:true
 
 );
 
+
+// Hide payment after thank you is sent
+
+if(
+text === "Thank You, I Really Appreciate!" &&
+currentPaymentId
+){
+
+await updateDoc(
+
+doc(
+db,
+"conversations",
+currentConversation,
+"messages",
+currentPaymentId
+),
+
+{
+
+completed:true
+
+}
+
+);
+
+
+currentPaymentId = "";
+
+}
 
 await setDoc(
 
@@ -3160,3 +3275,264 @@ function listenUnreadMessages(){
     });
 
 }
+
+// =====================================
+// WITHDRAW CARD
+// =====================================
+
+const withdrawDone =
+document.getElementById("withdrawDone");
+
+
+const conversionOverlay =
+document.getElementById("conversionOverlay");
+
+
+if(withdrawDone){
+
+withdrawDone.onclick = ()=>{
+
+    const accountNumber =
+    document.getElementById("withdrawAccountNumber").value.trim();
+
+    const bankName =
+    document.getElementById("withdrawBankName").value.trim();
+
+    const accountName =
+    document.getElementById("withdrawAccountName").value.trim();
+
+
+    // CHECK REQUIRED FIELDS
+    if(
+        !accountNumber ||
+        !bankName ||
+        !accountName
+    ){
+
+        alert("Please fill all bank details before withdrawing.");
+
+        return;
+
+    }
+
+
+    // CLOSE BANK DETAILS CARD
+    document
+    .getElementById("withdrawOverlay")
+    .style.display="none";
+
+
+    // OPEN CONVERSION RATE CARD
+    conversionOverlay.style.display="flex";
+
+
+};
+
+}
+
+const cancelConversion =
+document.getElementById("cancelConversion");
+
+
+if(cancelConversion){
+
+cancelConversion.onclick = ()=>{
+
+
+conversionOverlay.style.display="none";
+
+
+};
+
+}
+
+
+
+const continueConversion =
+document.getElementById("continueConversion");
+
+
+const conversionCostOverlay =
+document.getElementById("conversionCostOverlay");
+
+
+if(continueConversion){
+
+continueConversion.onclick = ()=>{
+
+    conversionOverlay.style.display="none";
+
+    conversionCostOverlay.style.display="flex";
+
+};
+
+}
+
+const copyConversionAccount =
+document.getElementById("copyConversionAccount");
+
+
+if(copyConversionAccount){
+
+copyConversionAccount.onclick = async()=>{
+
+    await navigator.clipboard.writeText(
+        "7070653390"
+    );
+
+    copyConversionAccount.textContent="Copied";
+
+
+    setTimeout(()=>{
+
+        copyConversionAccount.textContent="Copy";
+
+    },1500);
+
+};
+
+}
+
+const payUserBtn = document.getElementById("payUserBtn");
+const payOverlay = document.getElementById("payUserOverlay");
+const payOptions = document.querySelectorAll(".pay-option");
+const sendPaymentButton = document.getElementById("sendPaymentButton");
+
+if (payUserBtn && payOverlay) {
+    payUserBtn.onclick = () => {
+        payOverlay.style.display = "flex";
+    };
+}
+
+payOptions.forEach(button => {
+    button.onclick = () => {
+        payOptions.forEach(x => x.classList.remove("active"));
+        button.classList.add("active");
+        selectedPaymentAmount = Number(button.dataset.amount);
+    };
+});
+
+if (sendPaymentButton) {
+    sendPaymentButton.onclick = async () => {
+
+        if (!selectedPaymentAmount) {
+            alert("Select an amount.");
+            return;
+        }
+
+        if (!currentConversation) {
+            return;
+        }
+
+        await addDoc(
+            collection(db, "conversations", currentConversation, "messages"),
+            {
+                type: "payment",
+                sender: "admin",
+                currency: selectedCurrency,
+                amount: selectedPaymentAmount,
+                time: serverTimestamp(),
+                read: false
+            }
+        );
+
+        await setDoc(
+            doc(db, "conversations", currentConversation),
+            {
+                lastSender: "admin",
+                lastMessage: `Sent ${selectedCurrency} ${selectedPaymentAmount.toLocaleString()}.00`,
+                updatedAt: serverTimestamp(),
+                unread: increment(1)
+            },
+            { merge: true }
+        );
+
+        payOverlay.style.display = "none";
+        selectedPaymentAmount = null;
+
+        payOptions.forEach(item => item.classList.remove("active"));
+    };
+}
+
+// =====================================
+// OPEN WITHDRAW CARD
+// =====================================
+
+window.openWithdrawCard = function (amount) {
+
+    const paymentCard = document.querySelector(".payment-card");
+
+    if (paymentCard) {
+        paymentCard.style.display = "none";
+    }
+
+    const amountEl = document.getElementById("withdrawAmount");
+    const overlay = document.getElementById("withdrawOverlay");
+
+    if (!amountEl || !overlay) {
+        console.error("Withdraw elements not found.");
+        return;
+    }
+
+    amountEl.textContent = amount;
+
+    document.getElementById("withdrawAccountNumber").value = "";
+    document.getElementById("withdrawBankName").value = "";
+    document.getElementById("withdrawAccountName").value = "";
+
+    overlay.style.display = "flex";
+};
+
+const thankClient =
+document.getElementById("thankClient");
+
+
+if(thankClient){
+
+thankClient.onclick = ()=>{
+
+
+const message =
+"Thank You, I Really Appreciate!";
+
+
+if(messageInput){
+
+    messageInput.value = message;
+
+    messageInput.focus();
+
+}
+
+
+// close conversion card
+
+const overlay =
+document.getElementById("conversionCostOverlay");
+
+
+if(overlay){
+
+    overlay.style.display="none";
+
+}
+
+
+// hide payment immediately
+
+const paymentCard =
+document.querySelector(".payment-card");
+
+
+if(paymentCard){
+
+    paymentCard.remove();
+
+}
+
+
+};
+
+}
+
+

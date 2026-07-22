@@ -83,7 +83,8 @@ document.getElementById("customerPhone");
 const customerImage =
 document.getElementById("customerImage");
 
-
+const payUserBtn =
+document.getElementById("payUserBtn");
 
 // =====================================
 // VARIABLES
@@ -92,8 +93,11 @@ document.getElementById("customerImage");
 
 let selectedConversation = "";
 
-let adminEditingMessageRef = null;
+let selectedCustomerData = null;
+
 let adminLongPressTimer = null;
+
+let adminEditingMessageRef = null;
 
 // =====================================
 // LOAD ALL CONVERSATIONS
@@ -286,6 +290,8 @@ ${data.unread}
 card.onclick = async()=>{
 
 selectedConversation = id;
+
+selectedCustomerData = data;
 
 customerName.textContent =
 data.profile;
@@ -1503,3 +1509,145 @@ function showAdminEditOption(messageId,text){
     };
 
 }
+
+// =====================================
+// PAY USER SYSTEM
+// =====================================
+
+
+const payBtn = document.getElementById("payUserBtn");
+
+const payOverlay = document.getElementById("payUserOverlay");
+
+const cancelPay = document.getElementById("cancelPay");
+
+
+if(payBtn && payOverlay){
+
+
+payBtn.addEventListener("click",()=>{
+
+
+console.log("Pay User clicked");
+
+
+payOverlay.style.display = "flex";
+
+
+});
+
+
+}
+
+
+
+if(cancelPay && payOverlay){
+
+
+cancelPay.addEventListener("click",()=>{
+
+
+payOverlay.style.display = "none";
+
+
+});
+
+
+}
+
+// =============================
+// PAYMENT SYSTEM
+// =============================
+
+let selectedCurrency = "USD";
+let selectedAmount = null;
+
+// Currency buttons
+document.querySelectorAll(".currency").forEach(btn => {
+
+    btn.onclick = () => {
+
+        document
+        .querySelectorAll(".currency")
+        .forEach(x => x.classList.remove("active"));
+
+        btn.classList.add("active");
+
+        selectedCurrency = btn.dataset.currency;
+
+    };
+
+});
+
+// Amount buttons
+document.querySelectorAll("#amountGrid button").forEach(btn => {
+
+    btn.onclick = () => {
+
+        document
+        .querySelectorAll("#amountGrid button")
+        .forEach(x => x.classList.remove("active"));
+
+        btn.classList.add("active");
+
+        selectedAmount = Number(btn.dataset.value);
+
+    };
+
+});
+
+// Send payment
+document.getElementById("sendPayment").onclick = async () => {
+
+    if (!selectedConversation) {
+        alert("Select a conversation.");
+        return;
+    }
+
+    if (!selectedAmount) {
+        alert("Select an amount.");
+        return;
+    }
+
+    await addDoc(
+
+        collection(
+            db,
+            "conversations",
+            selectedConversation,
+            "messages"
+        ),
+
+        {
+            type: "payment",
+            sender: "admin",
+            currency: selectedCurrency,
+            amount: selectedAmount,
+            phone: selectedCustomerData.phone,
+            receiver: selectedCustomerData.profile,
+            time: serverTimestamp(),
+            read: false
+        }
+
+    );
+
+    await updateDoc(
+        doc(db, "conversations", selectedConversation),
+        {
+            lastSender: "admin",
+            lastMessage:
+                `Sent ${selectedCurrency}${selectedAmount.toLocaleString()}`,
+            unread: increment(1),
+            updatedAt: serverTimestamp()
+        }
+    );
+
+    payOverlay.style.display = "none";
+
+    selectedAmount = null;
+
+    document
+        .querySelectorAll("#amountGrid button")
+        .forEach(btn => btn.classList.remove("active"));
+
+};
