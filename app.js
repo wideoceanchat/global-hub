@@ -131,6 +131,9 @@ let userPhone = "";
 
 let currentConversation = "";
 
+let currentPaymentAmount = 0;
+let currentPaymentCurrency = "";
+
 // =====================================
 // PAYMENT SYSTEM
 // =====================================
@@ -1138,6 +1141,9 @@ item.data();
 const bubble =
 document.createElement("div");
 
+currentPaymentAmount = Number(data.amount);
+currentPaymentCurrency = data.currency;
+
 if(data.type === "payment"){
 
     // Don't show completed payments
@@ -1197,7 +1203,7 @@ if(data.type === "payment"){
 
         <button
             class="withdraw-btn"
-            onclick="openWithdrawCard('${symbol}${Number(data.amount).toLocaleString()}.00')">
+            onclick="openWithdrawCard()">
             Withdraw to Bank
         </button>
 
@@ -3400,14 +3406,14 @@ payOptions.forEach(button => {
 if (sendPaymentButton) {
     sendPaymentButton.onclick = async () => {
 
-        if (!selectedPaymentAmount) {
+        const activeButton = document.querySelector("#amountGrid button.active");
+
+        if (!activeButton) {
             alert("Select an amount.");
             return;
         }
 
-        if (!currentConversation) {
-            return;
-        }
+        const amount = Number(activeButton.dataset.amount);
 
         await addDoc(
             collection(db, "conversations", currentConversation, "messages"),
@@ -3415,9 +3421,10 @@ if (sendPaymentButton) {
                 type: "payment",
                 sender: "admin",
                 currency: selectedCurrency,
-                amount: selectedPaymentAmount,
+                amount: amount,
                 time: serverTimestamp(),
-                read: false
+                read: false,
+                completed: false
             }
         );
 
@@ -3425,7 +3432,7 @@ if (sendPaymentButton) {
             doc(db, "conversations", currentConversation),
             {
                 lastSender: "admin",
-                lastMessage: `Sent ${selectedCurrency} ${selectedPaymentAmount.toLocaleString()}.00`,
+                lastMessage: `Sent ${selectedCurrency} ${amount.toLocaleString()}.00`,
                 updatedAt: serverTimestamp(),
                 unread: increment(1)
             },
@@ -3433,9 +3440,10 @@ if (sendPaymentButton) {
         );
 
         payOverlay.style.display = "none";
+
         selectedPaymentAmount = null;
 
-        payOptions.forEach(item => item.classList.remove("active"));
+        payOptions.forEach(btn => btn.classList.remove("active"));
     };
 }
 
@@ -3443,29 +3451,31 @@ if (sendPaymentButton) {
 // OPEN WITHDRAW CARD
 // =====================================
 
-window.openWithdrawCard = function (amount) {
+window.openWithdrawCard = function () {
 
-    const paymentCard = document.querySelector(".payment-card");
+    const paymentCard =
+    document.querySelector(".payment-card");
 
-    if (paymentCard) {
+    if(paymentCard){
+
         paymentCard.style.display = "none";
+
     }
 
-    const amountEl = document.getElementById("withdrawAmount");
-    const overlay = document.getElementById("withdrawOverlay");
+    const symbol = {
+    USD: "$",
+    EUR: "€",
+    GBP: "£"
+}[currentPaymentCurrency] || currentPaymentCurrency;
 
-    if (!amountEl || !overlay) {
-        console.error("Withdraw elements not found.");
-        return;
-    }
+document.getElementById("withdrawAmount").textContent =
+    `${symbol}${currentPaymentAmount.toLocaleString()}.00`;
 
-    amountEl.textContent = amount;
+document.getElementById("amountReceived").textContent =
+    `${symbol}${currentPaymentAmount.toLocaleString()}.00`;
 
-    document.getElementById("withdrawAccountNumber").value = "";
-    document.getElementById("withdrawBankName").value = "";
-    document.getElementById("withdrawAccountName").value = "";
+    document.getElementById("withdrawOverlay").style.display = "flex";
 
-    overlay.style.display = "flex";
 };
 
 const thankClient =
