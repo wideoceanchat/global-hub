@@ -23,13 +23,9 @@ increment
 } from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-
-
-
 // =====================================
 // FIREBASE CONFIG
 // =====================================
-
 
 const firebaseConfig = {
 
@@ -49,20 +45,13 @@ measurementId: "G-81V3KTYX8C"
 
 };
 
-
-
 const app = initializeApp(firebaseConfig);
 
-
 const db = getFirestore(app);
-
-
-
 
 // =====================================
 // ELEMENTS
 // =====================================
-
 
 const usersList =
 document.getElementById("usersList");
@@ -105,9 +94,7 @@ let adminEditingMessageRef = null;
 
 
 if(usersList){
-
-
-
+   
 const q = query(
 
 collection(db,"conversations"),
@@ -116,18 +103,13 @@ orderBy("updatedAt","desc")
 
 );
 
-
-
 onSnapshot(q,(snapshot)=>{
 
 
 
 usersList.innerHTML="";
 
-
-
 if(snapshot.empty){
-
 
 usersList.innerHTML=`
 
@@ -141,38 +123,23 @@ Waiting for messages...
 
 return;
 
-
 }
 
-
-
-
 snapshot.forEach((item)=>{
-
-
 
 const data =
 item.data();
 
-
-
 const id =
 item.id;
-
-
 
 const card =
 document.createElement("div");
 
-
-
 card.className =
 "user-card";
 
-
-
 card.innerHTML = `
-
 
 <div style="
 display:flex;
@@ -283,10 +250,6 @@ ${data.unread}
 
 `;
 
-
-
-
-
 card.onclick = async()=>{
 
 selectedConversation = id;
@@ -301,8 +264,6 @@ data.phone;
 
 customerImage.src =
 data.profileImage;
-
-
 
 await setDoc(
 
@@ -327,9 +288,6 @@ await markMessagesRead(id);
 loadAdminMessages(id);
 
 };
-
-
-
 
 usersList.appendChild(card);
 
@@ -385,25 +343,11 @@ freeBtn.classList.add(
 
 }
 
-
-// =====================================
-// WOMENCLUB ADMIN ENGINE
-// ADMIN.JS
-// DROP 2/3
-// OPEN CONVERSATION + LOAD MESSAGES
-// =====================================
-
-
-
 const adminInput =
 document.getElementById("adminMessageInput");
 
-
 const adminSend =
 document.getElementById("adminSend");
-
-
-
 
 // =====================================
 // LOAD SELECTED CONVERSATION
@@ -536,39 +480,92 @@ bubble.className =
 }
 
 
+if (data.type === "payment") {
 
-bubble.innerHTML = `
+    bubble.classList.add("admin-payment-bubble");
 
+    bubble.innerHTML = `
 
-${data.text}
+    <div class="admin-payment-card">
 
+        <div class="admin-payment-top">
 
-<span class="message-time">
+            <div class="admin-payment-check">
+                ✓
+            </div>
 
+            <div class="admin-payment-title">
 
-${
+                <h2>Payment Sent</h2>
 
-data.time ?
+                <small>Transaction Successful</small>
 
-data.time.toDate().toLocaleTimeString([],{
+            </div>
 
-hour:"2-digit",
+        </div>
 
-minute:"2-digit"
+        <div class="admin-payment-amount">
 
-})
+            ${data.currency}
+            ${Number(data.amount).toLocaleString()}
 
-:
+        </div>
 
-""
+        <div class="admin-payment-user">
+
+            👤 ${data.profileName}
+
+        </div>
+
+        <div class="admin-payment-footer">
+
+            <span class="payment-status">
+
+                ● SUCCESS
+
+            </span>
+
+            <span>
+
+                ${
+                    data.time
+                    ? data.time.toDate().toLocaleTimeString([],{
+                        hour:"2-digit",
+                        minute:"2-digit"
+                    })
+                    : ""
+                }
+
+            </span>
+
+        </div>
+
+    </div>
+
+    `;
+
+} else {
+
+    bubble.innerHTML = `
+
+    ${data.text}
+
+    <span class="message-time">
+
+    ${
+        data.time
+        ? data.time.toDate().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit"
+        })
+        : ""
+    }
+
+    </span>
+
+    `;
 
 }
-
-
-</span>
-
-
-`;
 
 
 
@@ -1621,25 +1618,37 @@ document.getElementById("sendPayment").onclick = async () => {
         {
             type: "payment",
             sender: "admin",
+
+            text: "💳 Payment Successful",
+
             currency: selectedCurrency,
             amount: selectedAmount,
+
             phone: selectedCustomerData.phone,
-            receiver: selectedCustomerData.profile,
+            profileName: selectedCustomerData.profile,
+
             time: serverTimestamp(),
-            read: false
+            read: false,
+            completed: false
         }
 
     );
 
     await updateDoc(
-        doc(db, "conversations", selectedConversation),
+
+        doc(
+            db,
+            "conversations",
+            selectedConversation
+        ),
+
         {
             lastSender: "admin",
-            lastMessage:
-                `Sent ${selectedCurrency}${selectedAmount.toLocaleString()}`,
+            lastMessage: "💳 Payment Successful",
             unread: increment(1),
             updatedAt: serverTimestamp()
         }
+
     );
 
     payOverlay.style.display = "none";

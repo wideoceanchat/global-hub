@@ -299,59 +299,37 @@ const uniqueProfileNames = [
 ];
 
 
-const contacts = uniqueProfileNames.map((name,index)=>{
+const contacts = uniqueProfileNames.map((name, index) => {
 
+    const imageNumber = (index % 84) + 1;
 
-return {
+    return {
 
+        name,
 
-name:name,
+        image: `./${imageNumber}.jpeg`,
 
+        bio: "Available for conversations, friendship and meeting new people.",
 
-image:
-"./" + (index + 1) + ".jpeg",
+        hobbies: [
+            "Music",
+            "Travel",
+            "Movies",
+            "Fashion"
+        ],
 
+        status: Math.random() < 0.35 ? "online" : "offline",
 
-bio:
-"Available for conversations, friendship and meeting new people.",
+        lastSeen: null,
 
+        coverPhotos: [
+            `./covers/${imageNumber}-1.jpg`,
+            `./covers/${imageNumber}-2.jpg`
+        ]
 
-hobbies:[
-
-"Music",
-"Travel",
-"Movies",
-"Fashion"
-
-],
-
-status:
-Math.random() < 0.35
-?
-"online"
-:
-"offline",
-
-
-lastSeen:null,
-
-
-coverPhotos:[
-
-"https://picsum.photos/500/300?random="+index,
-
-"https://picsum.photos/500/300?random="+(index+200)
-
-]
-
-
-};
-
+    };
 
 });
-
-
-
 
 // =====================================
 // LOAD USER CONTACTS
@@ -1001,7 +979,7 @@ document.getElementById("chatTop").style.display="flex";
 const chatImg =
 document.getElementById("chatProfileImage");
 
-chatImg.src = profile.image;
+chatImg.src = profile.image || "./default-profile.png";
 document.getElementById("chatProfileName").textContent = profile.name;
 
 updateChatHeaderStatus();
@@ -2132,13 +2110,14 @@ if (openProfile) {
         zoom.id = "chatProfileZoom";
 
         zoom.innerHTML = `
-            <img src="${currentProfileData.image}">
-            <div class="zoom-status">
-                ${currentProfileData.status === "online"
-                    ? "Online"
-                    : "Last seen today at " + currentProfileData.lastSeen}
-            </div>
-        `;
+    <img src="${currentProfileData.image || "./default-profile.png"}"
+         onerror="fixImageError(this)">
+    <div class="zoom-status">
+        ${currentProfileData.status === "online"
+            ? "Online"
+            : "Last seen today at " + currentProfileData.lastSeen}
+    </div>
+`;
 
         document.body.appendChild(zoom);
 
@@ -2219,7 +2198,7 @@ if(imageViewer && fullImage){
 
 
 fullImage.src =
-currentProfileData.image;
+currentProfileData.image || "./default-profile.png";
 
 
 imageViewer.style.display="flex";
@@ -2447,8 +2426,7 @@ list.push({
 
 name:randomName,
 
-image:
-"./" + (((i+46)%84)+1) + ".jpeg",
+image: `./${((i + 46) % 84) + 1}.jpeg`,
 
 bio:
 "Available for international conversations.",
@@ -3035,11 +3013,9 @@ editingMessageRef=null;
 
 function fixImageError(img){
 
-    img.onerror = function(){
+    img.onerror = null;
 
-        this.style.display="none";
-
-    };
+    img.src = "./default-profile.png";
 
 }
 
@@ -3390,8 +3366,22 @@ copyConversionAccount.onclick = async()=>{
 
 const payUserBtn = document.getElementById("payUserBtn");
 const payOverlay = document.getElementById("payUserOverlay");
-const payOptions = document.querySelectorAll(".pay-option");
-const sendPaymentButton = document.getElementById("sendPaymentButton");
+const payOptions = document.querySelectorAll("#amountGrid button");
+const sendPaymentButton = document.getElementById("sendPayment");
+const cancelPay = document.getElementById("cancelPay");
+
+if (payUserBtn) {
+    payUserBtn.onclick = () => {
+        payOverlay.style.display = "flex";
+    };
+}
+
+if (cancelPay) {
+    cancelPay.onclick = () => {
+        payOverlay.style.display = "none";
+    };
+}
+
 
 if (payUserBtn && payOverlay) {
     payUserBtn.onclick = () => {
@@ -3529,5 +3519,4 @@ if(paymentCard){
 };
 
 }
-
 
