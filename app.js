@@ -1409,84 +1409,91 @@ messages.scrollHeight;
 // =====================================
 
 
+// =====================================
+// PERMANENT MESSAGE LIMIT SYSTEM
+// =====================================
+
 async function checkMessageBalanceLimit(){
 
-if(!currentConversation){
+    if(!currentConversation){
+        return false;
+    }
 
-return false;
+    const conversationRef =
+        doc(db,"conversations",currentConversation);
 
-}
+    const snap =
+        await getDoc(conversationRef);
 
+    const data =
+        snap.data() || {};
 
-const snap =
-await getDoc(
+    /*
+        IMPORTANT:
 
-doc(
-db,
-"conversations",
-currentConversation
-)
+        totalUserMessages is a permanent counter.
 
-);
+        It does NOT depend on how many messages currently
+        exist in Firestore.
 
+        Therefore:
+        - Delete message     -> count stays
+        - Edit message       -> count stays
+        - Save edit          -> count stays
+        - Cancel edit        -> count stays
+    */
 
-const data =
-snap.data() || {};
-
-const messagesSnap =
-await getDocs(
-
-collection(
-
-db,
-
-"conversations",
-
-currentConversation,
-
-"messages"
-
-)
-
-);
+    let totalUserMessages =
+        Number(data.totalUserMessages || 0);
 
 
+    // -------------------------------------
+    // FIRST FREE PERIOD
+    // -------------------------------------
 
-let userMessages = 0;
+    if(!data.freeGranted){
 
+        if(totalUserMessages >= 8){
 
+            return true;
 
-messagesSnap.forEach(item=>{
+        }
 
+        return false;
 
-if(
-item.data().sender==="user"
-){
-
-userMessages++;
-
-}
-
-
-});
+    }
 
 
+    // -------------------------------------
+    // AFTER ADMIN UNLOCK
+    // -------------------------------------
+
+    if(totalUserMessages >= 10){
+
+        await updateDoc(
+
+            conversationRef,
+
+            {
+
+                freeGranted:false,
+
+                freeUser:false,
+
+                rechargeLocked:true,
+
+                unlockedMessages:0
+
+            }
+
+        );
+
+        return true;
+
+    }
 
 
-// FIRST FREE PERIOD
-
-if(!data.freeGranted){
-
-
-if(userMessages >= 8){
-
-    return true;
-
-}
-
-
-return false;
-
+    return false;
 
 }
 
