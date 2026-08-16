@@ -1656,214 +1656,242 @@ function listenFreeUserStatus(){
 
 if(sendMessage){
 
+    sendMessage.onclick = async()=>{
 
+        const text =
+            messageInput.value.trim();
 
-sendMessage.onclick = async()=>{
 
+        // =====================================
+        // EMPTY MESSAGE
+        // =====================================
 
+        if(
+            !text ||
+            !currentConversation
+        ){
 
-const text =
-messageInput.value.trim();
+            return;
 
+        }
 
 
-if(
-!text ||
-!currentConversation
-){
+        // =====================================
+        // CHECK MESSAGE LIMIT
+        // =====================================
 
-return;
+        const balanceLocked =
+            await checkMessageBalanceLimit();
 
-}
 
+        // =====================================
+        // 9TH MESSAGE
+        // =====================================
 
+        if(balanceLocked){
 
+            // IMPORTANT:
+            // Do NOT clear messageInput.
+            // The typed message stays there.
 
-// CHECK IF USER HAS FINISHED FREE MESSAGES
+            showBalanceRecharge();
 
+            messageInput.focus();
 
-const balanceLocked =
-await checkMessageBalanceLimit();
+            return;
 
+        }
 
 
-if(balanceLocked){
+        // =====================================
+        // SEND MESSAGE
+        // =====================================
 
+        try{
 
+            await addDoc(
 
-// KEEP MESSAGE INSIDE INPUT
+                collection(
+                    db,
+                    "conversations",
+                    currentConversation,
+                    "messages"
+                ),
 
+                {
 
-showBalanceRecharge();
+                    sender:"user",
 
+                    text:text,
 
+                    time:serverTimestamp(),
 
-return;
+                    read:false,
 
+                    delivered:true
 
-}
+                }
 
+            );
 
 
+            // =====================================
+            // PERMANENT MESSAGE COUNTER
+            // =====================================
+            // This counts every user message sent.
+            // Editing/deleting cannot reduce it.
 
+            await updateDoc(
 
-// SEND MESSAGE
+                doc(
+                    db,
+                    "conversations",
+                    currentConversation
+                ),
 
-const newMessage = await addDoc(
+                {
 
-    collection(
-        db,
-        "conversations",
-        currentConversation,
-        "messages"
-    ),
+                    permanentUserMessageCount:
+                        increment(1)
 
-    {
+                }
 
-        sender:"user",
+            );
 
-        text:text,
 
-        time:serverTimestamp(),
+            // =====================================
+            // HIDE PAYMENT AFTER THANK YOU
+            // =====================================
 
-        read:false,
+            if(
+                text === "Thank You, I Really Appreciate!" &&
+                currentPaymentId
+            ){
 
-        delivered:true
+                await updateDoc(
 
-    }
+                    doc(
+                        db,
+                        "conversations",
+                        currentConversation,
+                        "messages",
+                        currentPaymentId
+                    ),
 
-);
+                    {
 
+                        completed:true
 
-// =====================================
-// PERMANENT MESSAGE LIMIT COUNTER
-// =====================================
-// This is intentionally stored separately
-// from the actual messages.
-// Deleting or editing a message will NOT
-// decrease this number.
+                    }
 
-await updateDoc(
+                );
 
-    doc(
-        db,
-        "conversations",
-        currentConversation
-    ),
 
-    {
+                currentPaymentId = "";
 
-        permanentUserMessageCount:
-            increment(1)
+            }
 
-    }
 
-);
+            // =====================================
+            // UPDATE CONVERSATION
+            // =====================================
 
+            await setDoc(
 
-// Hide payment after thank you is sent
+                doc(
+                    db,
+                    "conversations",
+                    currentConversation
+                ),
 
-if(
-text === "Thank You, I Really Appreciate!" &&
-currentPaymentId
-){
+                {
 
-await updateDoc(
+                    lastMessage:text,
 
-doc(
-db,
-"conversations",
-currentConversation,
-"messages",
-currentPaymentId
-),
+                    lastSender:"user",
 
-{
+                    lastRead:false,
 
-completed:true
+                    lastTime:serverTimestamp(),
 
-}
+                    updatedAt:serverTimestamp(),
 
-);
+                    adminReply:false,
 
+                    unread:increment(1)
 
-currentPaymentId = "";
+                },
 
-}
+                {
 
-await setDoc(
+                    merge:true
 
-doc(
-db,
-"conversations",
-currentConversation
-),
+                }
 
-{
+            );
 
-lastMessage:text,
 
-lastSender:"user",
+            // =====================================
+            // ADMIN UNLOCK COUNTER
+            // =====================================
 
-lastRead:false,
+            const conversationRef =
+                doc(
+                    db,
+                    "conversations",
+                    currentConversation
+                );
 
-lastTime:serverTimestamp(),
 
-updatedAt:serverTimestamp(),
+            const conversationSnap =
+                await getDoc(conversationRef);
 
-adminReply:false,
 
-unread:increment(1)
+            if(conversationSnap.exists()){
 
-},
+                const data =
+                    conversationSnap.data();
 
-{
 
-merge:true
+                if(data.freeGranted){
 
-}
+                    await updateDoc(
 
-);
+                        conversationRef,
 
-const conversationRef =
-doc(db,"conversations",currentConversation);
+                        {
 
-const conversationSnap =
-await getDoc(conversationRef);
+                            unlockedMessages:
+                                increment(1)
 
-if(conversationSnap.exists()){
+                        }
 
-    const data =
-    conversationSnap.data();
+                    );
 
-    if(data.freeGranted){
+                }
 
+            }
 
-await updateDoc(
 
-conversationRef,
+            // =====================================
+            // ONLY CLEAR INPUT AFTER SUCCESSFUL SEND
+            // =====================================
 
-{
+            messageInput.value = "";
 
-unlockedMessages:
-increment(1)
+            messageInput.focus();
 
-}
 
-);
+        }catch(error){
 
+            console.error(
+                "Message sending failed:",
+                error
+            );
 
-}
+        }
 
-}
-
-messageInput.value = "";
-
-messageInput.focus();
-
-};
-
-
+    };
 
 }
 
