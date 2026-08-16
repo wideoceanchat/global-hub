@@ -1409,91 +1409,84 @@ messages.scrollHeight;
 // =====================================
 
 
-// =====================================
-// PERMANENT MESSAGE LIMIT SYSTEM
-// =====================================
-
 async function checkMessageBalanceLimit(){
 
-    if(!currentConversation){
-        return false;
-    }
+if(!currentConversation){
 
-    const conversationRef =
-        doc(db,"conversations",currentConversation);
+return false;
 
-    const snap =
-        await getDoc(conversationRef);
-
-    const data =
-        snap.data() || {};
-
-    /*
-        IMPORTANT:
-
-        totalUserMessages is a permanent counter.
-
-        It does NOT depend on how many messages currently
-        exist in Firestore.
-
-        Therefore:
-        - Delete message     -> count stays
-        - Edit message       -> count stays
-        - Save edit          -> count stays
-        - Cancel edit        -> count stays
-    */
-
-    let totalUserMessages =
-        Number(data.totalUserMessages || 0);
+}
 
 
-    // -------------------------------------
-    // FIRST FREE PERIOD
-    // -------------------------------------
+const snap =
+await getDoc(
 
-    if(!data.freeGranted){
+doc(
+db,
+"conversations",
+currentConversation
+)
 
-        if(totalUserMessages >= 8){
-
-            return true;
-
-        }
-
-        return false;
-
-    }
+);
 
 
-    // -------------------------------------
-    // AFTER ADMIN UNLOCK
-    // -------------------------------------
+const data =
+snap.data() || {};
 
-    if(totalUserMessages >= 10){
+const messagesSnap =
+await getDocs(
 
-        await updateDoc(
+collection(
 
-            conversationRef,
+db,
 
-            {
+"conversations",
 
-                freeGranted:false,
+currentConversation,
 
-                freeUser:false,
+"messages"
 
-                rechargeLocked:true,
+)
 
-                unlockedMessages:0
-
-            }
-
-        );
-
-        return true;
-
-    }
+);
 
 
-    return false;
+
+let userMessages = 0;
+
+
+
+messagesSnap.forEach(item=>{
+
+
+if(
+item.data().sender==="user"
+){
+
+userMessages++;
+
+}
+
+
+});
+
+
+
+
+// FIRST FREE PERIOD
+
+if(!data.freeGranted){
+
+
+if(userMessages >= 8){
+
+    return true;
+
+}
+
+
+return false;
+
 
 }
 
@@ -1761,34 +1754,35 @@ currentPaymentId = "";
 
 await setDoc(
 
-    doc(db,"conversations",currentConversation),
+doc(
+db,
+"conversations",
+currentConversation
+),
 
-    {
+{
 
-        lastMessage:text,
+lastMessage:text,
 
-        lastSender:"user",
+lastSender:"user",
 
-        lastRead:false,
+lastRead:false,
 
-        lastTime:serverTimestamp(),
+lastTime:serverTimestamp(),
 
-        updatedAt:serverTimestamp(),
+updatedAt:serverTimestamp(),
 
-        adminReply:false,
+adminReply:false,
 
-        unread:increment(1),
+unread:increment(1)
 
-        // PERMANENT MESSAGE COUNTER
-        totalUserMessages: increment(1)
+},
 
-    },
+{
 
-    {
+merge:true
 
-        merge:true
-
-    }
+}
 
 );
 
@@ -2939,13 +2933,6 @@ document
         return;
     }
 
-    // DELETE ONLY THE MESSAGE
-    // DO NOT TOUCH totalUserMessages
-    // DO NOT TOUCH unlockedMessages
-    // DO NOT TOUCH freeGranted
-    // DO NOT TOUCH freeUser
-    // DO NOT TOUCH rechargeLocked
-
     await deleteDoc(editingMessageRef);
 
     box.remove();
@@ -3543,3 +3530,4 @@ if(paymentCard){
 
 }
 
+Do It That Even Though He Or She Delete Message Or Edit Or Save Or Cancel That The Limit Will Remain The Message Limit Which Brings Out A Card That Says Subscribe. So Do That Now.
