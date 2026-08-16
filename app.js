@@ -3006,13 +3006,13 @@ editingMessageRef=null;
 
 }
 
-function fixImageError(img){
+window.fixImageError = function(img){
 
     img.onerror = null;
 
     img.src = "./default-profile.png";
 
-}
+};
 
 const subscribeContinue =
 document.querySelector(".payment-done");
