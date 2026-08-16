@@ -717,26 +717,53 @@ updateChatHeaderStatus();
 
 
 
-startChat.onclick = async()=>{
+// =====================================
+// LOGIN
+// =====================================
 
-    try{
+if (startChat) {
+
+    startChat.onclick = async () => {
 
         const phone = phoneInput.value.trim();
-        const cleanPhone = phone.replace(/\D/g,"");
+        const cleanPhone = phone.replace(/\D/g, "");
 
-        if(cleanPhone.length === 0){
-            showLoginNotice("Please enter your phone number.");
+        // -------------------------------
+        // CHECK PHONE NUMBER
+        // -------------------------------
+
+        if (!cleanPhone) {
+
+            showLoginNotice(
+                "Please enter your phone number."
+            );
+
             return;
         }
 
-        if(cleanPhone.length < 10 || cleanPhone.length > 11){
-            showLoginNotice("Please enter your 10 digits or 11 digits phone number.");
+        if (
+            cleanPhone.length < 10 ||
+            cleanPhone.length > 11
+        ) {
+
+            showLoginNotice(
+                "Please enter your 10 digits or 11 digits phone number."
+            );
+
             return;
         }
 
-        if(!checkDeviceAccount(cleanPhone)){
+        // -------------------------------
+        // CHECK DEVICE ACCOUNT
+        // -------------------------------
+
+        if (!checkDeviceAccount(cleanPhone)) {
             return;
         }
+
+        // -------------------------------
+        // SAVE PHONE LOCALLY
+        // -------------------------------
 
         userPhone = cleanPhone;
 
@@ -747,62 +774,116 @@ startChat.onclick = async()=>{
             cleanPhone
         );
 
-       try {
+        // -------------------------------
+        // CHECK SPECIAL NUMBER
+        // -------------------------------
 
-    await checkSpecialNumber(cleanPhone);
+        try {
 
-} catch(error) {
+            await checkSpecialNumber(cleanPhone);
 
-    console.error("Special number check failed:", error);
+        } catch (error) {
 
-}
+            console.error(
+                "Special number check failed:",
+                error
+            );
 
-
-       const userRef = doc(db,"users",cleanPhone);
-
-const userSnap = await getDoc(userRef);
-
-if(!userSnap.exists()){
-
-    await setDoc(
-        userRef,
-        {
-            phone:cleanPhone,
-            online:true,
-            createdAt:serverTimestamp(),
-            updatedAt:serverTimestamp()
-        }
-    );
-
-}else{
-
-    // Existing users do not update Firestore every login
-
-}
-
-
-        loginBox.style.display="none";
-
-
-        contactsContainer.style.display="flex";
-
-
-        await loadContacts();
-
-
-        listenUnreadMessages();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showLoginNotice(
-            "Unable to connect to the server."
-        );
+            // Do NOT stop login if this check fails.
+            isSpecialUser = false;
+            specialContacts = [];
 
         }
-};
+
+        // -------------------------------
+        // CREATE / UPDATE USER
+        // -------------------------------
+
+        try {
+
+            const userRef =
+                doc(
+                    db,
+                    "users",
+                    cleanPhone
+                );
+
+            const userSnap =
+                await getDoc(userRef);
+
+            if (!userSnap.exists()) {
+
+                await setDoc(
+                    userRef,
+                    {
+                        phone: cleanPhone,
+                        online: true,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp()
+                    }
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Firebase user setup failed:",
+                error
+            );
+
+            /*
+             * IMPORTANT:
+             * Do not block the login screen because
+             * the user document failed.
+             */
+        }
+
+        // -------------------------------
+        // OPEN CONTACTS
+        // -------------------------------
+
+        loginBox.style.display = "none";
+
+        contactsContainer.style.display = "flex";
+
+        // -------------------------------
+        // LOAD CONTACTS
+        // -------------------------------
+
+        try {
+
+            await loadContacts();
+
+        } catch (error) {
+
+            console.error(
+                "Contacts loading failed:",
+                error
+            );
+
+        }
+
+        // -------------------------------
+        // START UNREAD LISTENER
+        // -------------------------------
+
+        try {
+
+            listenUnreadMessages();
+
+        } catch (error) {
+
+            console.error(
+                "Unread listener failed:",
+                error
+            );
+
+        }
+
+    };
+
+}
 
 function updateChatHeaderStatus() {
 
