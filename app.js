@@ -2939,6 +2939,13 @@ document
         return;
     }
 
+    // DELETE ONLY THE MESSAGE
+    // DO NOT TOUCH totalUserMessages
+    // DO NOT TOUCH unlockedMessages
+    // DO NOT TOUCH freeGranted
+    // DO NOT TOUCH freeUser
+    // DO NOT TOUCH rechargeLocked
+
     await deleteDoc(editingMessageRef);
 
     box.remove();
