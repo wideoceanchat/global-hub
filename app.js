@@ -715,7 +715,7 @@ updateChatHeaderStatus();
 }
 
 
-if(startChat){
+
 
 startChat.onclick = async()=>{
 
@@ -3518,5 +3518,3 @@ if(paymentCard){
 };
 
 }
-
-Do It That Even Though He Or She Delete Message Or Edit Or Save Or Cancel That The Limit Will Remain The Message Limit Which Brings Out A Card That Says Subscribe. So Do That Now.
