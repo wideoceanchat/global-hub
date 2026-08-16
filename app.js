@@ -1497,7 +1497,7 @@ async function checkMessageBalanceLimit(){
     }
 
     const conversationRef =
-        doc(db,"conversations",currentConversation);
+        doc(db, "conversations", currentConversation);
 
     const snap =
         await getDoc(conversationRef);
@@ -1513,61 +1513,25 @@ async function checkMessageBalanceLimit(){
         data.freeGranted === true ||
         data.freeUser === true
     ){
+
         return false;
+
     }
 
 
     // =====================================
-    // PERMANENT USER MESSAGE COUNTER
+    // PERMANENT MESSAGE COUNTER
     // =====================================
-    // This counter NEVER decreases.
-    // Editing or deleting a message cannot
-    // reduce the user's message limit.
 
     const permanentCount =
         Number(data.permanentUserMessageCount || 0);
 
 
     // =====================================
-    // FIRST FREE LIMIT
+    // FIRST 8 MESSAGES ARE FREE
     // =====================================
 
-    if(!data.freeGranted){
-
-        if(permanentCount >= 8){
-
-            return true;
-
-        }
-
-        return false;
-
-    }
-
-
-    // =====================================
-    // AFTER ADMIN UNLOCK
-    // =====================================
-
-    if(permanentCount >= 10){
-
-        await updateDoc(
-
-            conversationRef,
-
-            {
-
-                freeGranted:false,
-
-                freeUser:false,
-
-                rechargeLocked:true,
-
-                unlockedMessages:0
-
-            }
-
-        );
+    if(permanentCount >= 8){
 
         return true;
 
