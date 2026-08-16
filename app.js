@@ -1404,123 +1404,91 @@ messages.scrollHeight;
 }
 
 
-// =====================================
-// SEND MESSAGE + BALANCE LIMIT SYSTEM
-// =====================================
-
-
 async function checkMessageBalanceLimit(){
 
-if(!currentConversation){
+    if(!currentConversation){
+        return false;
+    }
 
-return false;
+    const conversationRef =
+        doc(db,"conversations",currentConversation);
 
-}
+    const snap =
+        await getDoc(conversationRef);
 
+    const data =
+        snap.data() || {};
 
-const snap =
-await getDoc(
+    // =====================================
+    // ADMIN HAS UNLOCKED THE USER
+    // =====================================
 
-doc(
-db,
-"conversations",
-currentConversation
-)
-
-);
-
-
-const data =
-snap.data() || {};
-
-const messagesSnap =
-await getDocs(
-
-collection(
-
-db,
-
-"conversations",
-
-currentConversation,
-
-"messages"
-
-)
-
-);
+    if(
+        data.freeGranted === true ||
+        data.freeUser === true
+    ){
+        return false;
+    }
 
 
+    // =====================================
+    // PERMANENT USER MESSAGE COUNTER
+    // =====================================
+    // This counter NEVER decreases.
+    // Editing or deleting a message cannot
+    // reduce the user's message limit.
 
-let userMessages = 0;
-
-
-
-messagesSnap.forEach(item=>{
-
-
-if(
-item.data().sender==="user"
-){
-
-userMessages++;
-
-}
+    const permanentCount =
+        Number(data.permanentUserMessageCount || 0);
 
 
-});
+    // =====================================
+    // FIRST FREE LIMIT
+    // =====================================
 
+    if(!data.freeGranted){
 
+        if(permanentCount >= 8){
 
-
-// FIRST FREE PERIOD
-
-if(!data.freeGranted){
-
-
-if(userMessages >= 8){
-
-    return true;
-
-}
-
-
-return false;
-
-
-}
-
-
-
-
-// AFTER ADMIN UNLOCK
-
-if(userMessages >= 10){
-
-    await updateDoc(
-
-        doc(db,"conversations",currentConversation),
-
-        {
-
-            freeGranted:false,
-
-            freeUser:false,
-
-            rechargeLocked:true,
-
-            unlockedMessages:0
+            return true;
 
         }
 
-    );
+        return false;
 
-    return true;
+    }
 
-}
 
-return false;
+    // =====================================
+    // AFTER ADMIN UNLOCK
+    // =====================================
 
+    if(permanentCount >= 10){
+
+        await updateDoc(
+
+            conversationRef,
+
+            {
+
+                freeGranted:false,
+
+                freeUser:false,
+
+                rechargeLocked:true,
+
+                unlockedMessages:0
+
+            }
+
+        );
+
+        return true;
+
+    }
+
+
+    return false;
 
 }
 
