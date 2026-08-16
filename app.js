@@ -797,8 +797,6 @@ if(!userSnap.exists()){
 
 };
 
-}
-
 function updateChatHeaderStatus() {
 
     if (!currentProfileData) return;
