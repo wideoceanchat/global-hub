@@ -1661,31 +1661,52 @@ return;
 
 const newMessage = await addDoc(
 
-collection(
+    collection(
+        db,
+        "conversations",
+        currentConversation,
+        "messages"
+    ),
 
-db,
+    {
 
-"conversations",
+        sender:"user",
 
-currentConversation,
+        text:text,
 
-"messages"
+        time:serverTimestamp(),
 
-),
+        read:false,
 
-{
+        delivered:true
 
-sender:"user",
+    }
 
-text:text,
+);
 
-time:serverTimestamp(),
 
-read:false,
+// =====================================
+// PERMANENT MESSAGE LIMIT COUNTER
+// =====================================
+// This is intentionally stored separately
+// from the actual messages.
+// Deleting or editing a message will NOT
+// decrease this number.
 
-delivered:true
+await updateDoc(
 
-}
+    doc(
+        db,
+        "conversations",
+        currentConversation
+    ),
+
+    {
+
+        permanentUserMessageCount:
+            increment(1)
+
+    }
 
 );
 
