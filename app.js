@@ -747,7 +747,15 @@ startChat.onclick = async()=>{
             cleanPhone
         );
 
-        await checkSpecialNumber(cleanPhone);
+       try {
+
+    await checkSpecialNumber(cleanPhone);
+
+} catch(error) {
+
+    console.error("Special number check failed:", error);
+
+}
 
 
        const userRef = doc(db,"users",cleanPhone);
