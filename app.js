@@ -1559,13 +1559,22 @@ function showBalanceRecharge(){
             return;
         }
 
-        const oldBalance =
-        document.querySelector(".balance-message");
+const oldBalance =
+    document.querySelector(".balance-message");
 
-        if(oldBalance){
-            oldBalance.style.display = "block";
-            return;
-        }
+if(oldBalance){
+    oldBalance.style.display = "block";
+}
+
+const rechargeOverlay =
+    document.getElementById("rechargeOverlay");
+
+if(rechargeOverlay){
+    rechargeOverlay.style.display = "flex";
+}
+
+messages.scrollTop =
+    messages.scrollHeight;
 
         const balanceBox =
         document.createElement("div");
