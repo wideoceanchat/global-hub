@@ -1761,35 +1761,34 @@ currentPaymentId = "";
 
 await setDoc(
 
-doc(
-db,
-"conversations",
-currentConversation
-),
+    doc(db,"conversations",currentConversation),
 
-{
+    {
 
-lastMessage:text,
+        lastMessage:text,
 
-lastSender:"user",
+        lastSender:"user",
 
-lastRead:false,
+        lastRead:false,
 
-lastTime:serverTimestamp(),
+        lastTime:serverTimestamp(),
 
-updatedAt:serverTimestamp(),
+        updatedAt:serverTimestamp(),
 
-adminReply:false,
+        adminReply:false,
 
-unread:increment(1)
+        unread:increment(1),
 
-},
+        // PERMANENT MESSAGE COUNTER
+        totalUserMessages: increment(1)
 
-{
+    },
 
-merge:true
+    {
 
-}
+        merge:true
+
+    }
 
 );
 
