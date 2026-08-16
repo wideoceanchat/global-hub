@@ -1499,11 +1499,16 @@ async function checkMessageBalanceLimit(){
     const conversationRef =
         doc(db, "conversations", currentConversation);
 
-    const snap =
+    const conversationSnap =
         await getDoc(conversationRef);
 
+    if(!conversationSnap.exists()){
+        return false;
+    }
+
     const data =
-        snap.data() || {};
+        conversationSnap.data() || {};
+
 
     // =====================================
     // ADMIN HAS UNLOCKED THE USER
@@ -1520,15 +1525,105 @@ async function checkMessageBalanceLimit(){
 
 
     // =====================================
-    // PERMANENT MESSAGE COUNTER
+    // GET EXISTING PERMANENT COUNTER
     // =====================================
 
-    const permanentCount =
+    let permanentCount =
         Number(data.permanentUserMessageCount || 0);
 
 
     // =====================================
-    // FIRST 8 MESSAGES ARE FREE
+    // IMPORTANT:
+    // COUNT OLD USER MESSAGES TOO
+    // =====================================
+    //
+    // This makes messages sent BEFORE this
+    // system was added count toward the limit.
+    //
+    // We only increase the permanent counter.
+    // We NEVER decrease it.
+    //
+
+    try{
+
+        const messagesSnapshot =
+            await getDocs(
+
+                collection(
+                    db,
+                    "conversations",
+                    currentConversation,
+                    "messages"
+                )
+
+            );
+
+
+        let existingUserMessages = 0;
+
+
+        messagesSnapshot.forEach(messageDoc => {
+
+            const message =
+                messageDoc.data();
+
+
+            if(message.sender === "user"){
+
+                existingUserMessages++;
+
+            }
+
+        });
+
+
+        // Use whichever number is higher.
+        //
+        // This is important because deleting a message
+        // must NOT give the user another free message.
+
+        if(existingUserMessages > permanentCount){
+
+            permanentCount =
+                existingUserMessages;
+
+
+            // Save the permanent historical count
+
+            await setDoc(
+
+                conversationRef,
+
+                {
+
+                    permanentUserMessageCount:
+                        permanentCount
+
+                },
+
+                {
+
+                    merge:true
+
+                }
+
+            );
+
+        }
+
+
+    }catch(error){
+
+        console.error(
+            "Unable to count previous messages:",
+            error
+        );
+
+    }
+
+
+    // =====================================
+    // FIRST 8 TOTAL USER MESSAGES ARE FREE
     // =====================================
 
     if(permanentCount >= 8){
