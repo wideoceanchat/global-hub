@@ -793,8 +793,6 @@ if(!userSnap.exists()){
             "Unable to connect to the server."
         );
 
-    }
-
 };
 
 function updateChatHeaderStatus() {
