@@ -4408,3 +4408,474 @@ PAY USER OVERLAY
     color: #4ade80;
     font-weight: 700;
 }
+
+/* =========================================================
+   ADMIN DASHBOARD MOBILE RESPONSIVE SYSTEM
+   ========================================================= */
+
+/* Desktop */
+.admin-dashboard {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   LEFT CONVERSATION SIDEBAR
+   ========================================================= */
+
+.admin-users {
+    width: 360px;
+    min-width: 360px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   ADMIN CHAT
+   ========================================================= */
+
+.admin-chat {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   USERS LIST
+   ========================================================= */
+
+.users-list {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   CHAT MESSAGES
+   ========================================================= */
+
+.admin-messages {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   CHAT INPUT
+   ========================================================= */
+
+.admin-input-area {
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        height: 100dvh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+
+    .admin-dashboard {
+        width: 100%;
+        height: 100%;
+        height: 100dvh;
+        position: relative;
+        display: block;
+        overflow: hidden;
+    }
+
+
+    /* =====================================================
+       CONVERSATION LIST
+       ===================================================== */
+
+    .admin-users {
+        position: absolute;
+        inset: 0;
+
+        width: 100%;
+        min-width: 100%;
+
+        height: 100%;
+        height: 100dvh;
+
+        background: #111b21;
+
+        display: flex;
+        flex-direction: column;
+
+        transform: translateX(0);
+
+        transition:
+            transform 0.25s ease;
+
+        z-index: 20;
+    }
+
+
+    /* =====================================================
+       CHAT SCREEN
+       ===================================================== */
+
+    .admin-chat {
+        position: absolute;
+        inset: 0;
+
+        width: 100%;
+        height: 100%;
+        height: 100dvh;
+
+        background: #0b141a;
+
+        display: flex;
+        flex-direction: column;
+
+        transform: translateX(100%);
+
+        transition:
+            transform 0.25s ease;
+
+        z-index: 30;
+    }
+
+
+    /* =====================================================
+       WHEN CHAT IS OPEN
+       ===================================================== */
+
+    .admin-dashboard.mobile-chat-open
+    .admin-users {
+
+        transform: translateX(-100%);
+
+    }
+
+
+    .admin-dashboard.mobile-chat-open
+    .admin-chat {
+
+        transform: translateX(0);
+
+    }
+
+
+    /* =====================================================
+       ADMIN HEADER
+       ===================================================== */
+
+    .admin-header {
+        flex-shrink: 0;
+    }
+
+
+    /* =====================================================
+       SEARCH
+       ===================================================== */
+
+    .search-box {
+        flex-shrink: 0;
+    }
+
+
+    .search-box input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+
+    /* =====================================================
+       USERS LIST
+       ===================================================== */
+
+    .users-list {
+        flex: 1;
+        min-height: 0;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        -webkit-overflow-scrolling: touch;
+    }
+
+
+    /* =====================================================
+       CHAT HEADER
+       ===================================================== */
+
+    .admin-chat-header {
+        flex-shrink: 0;
+
+        position: relative;
+        z-index: 5;
+    }
+
+
+    /* =====================================================
+       CUSTOMER PROFILE
+       ===================================================== */
+
+    .customer-profile {
+        min-width: 0;
+        flex: 1;
+    }
+
+
+    .customer-profile > div:last-child {
+        min-width: 0;
+    }
+
+
+    #customerName {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+    #customerPhone {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+    }
+
+
+    /* =====================================================
+       ADMIN ACTIONS
+       ===================================================== */
+
+    .admin-actions {
+        flex-shrink: 0;
+    }
+
+
+    .pay-user-btn {
+        white-space: nowrap;
+    }
+
+
+    /* =====================================================
+       MESSAGES
+       ===================================================== */
+
+    .admin-messages {
+        flex: 1;
+        min-height: 0;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        -webkit-overflow-scrolling: touch;
+    }
+
+
+    /* =====================================================
+       MESSAGE INPUT
+       ===================================================== */
+
+    .admin-input-area {
+        flex-shrink: 0;
+
+        width: 100%;
+
+        box-sizing: border-box;
+
+        padding-bottom:
+            env(safe-area-inset-bottom);
+    }
+
+
+    .message-box {
+        min-width: 0;
+        flex: 1;
+    }
+
+
+    #adminMessageInput {
+        min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+
+    /* =====================================================
+       PAY USER OVERLAY
+       ===================================================== */
+
+    .pay-user-overlay {
+        position: fixed !important;
+
+        inset: 0 !important;
+
+        width: 100% !important;
+        height: 100% !important;
+        height: 100dvh !important;
+
+        z-index: 9999 !important;
+
+        box-sizing: border-box;
+    }
+
+
+    .pay-user-card {
+        width: calc(100% - 30px);
+        max-width: 420px;
+
+        max-height: calc(100dvh - 30px);
+
+        overflow-y: auto;
+
+        box-sizing: border-box;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .admin-header {
+        padding:
+            12px 14px;
+    }
+
+
+    .admin-header h2 {
+        font-size: 18px;
+    }
+
+
+    .admin-header p {
+        font-size: 12px;
+    }
+
+
+    .search-box {
+        padding:
+            8px 10px;
+    }
+
+
+    .admin-chat-header {
+        padding:
+            10px;
+        min-height: 60px;
+    }
+
+
+    .customer-avatar {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+    }
+
+
+    .customer-avatar img {
+        width: 42px;
+        height: 42px;
+    }
+
+
+    #customerName {
+        font-size: 15px;
+    }
+
+
+    #customerPhone {
+        font-size: 11px;
+    }
+
+
+    .pay-user-btn {
+        padding:
+            7px 9px;
+
+        font-size: 11px;
+    }
+
+
+    .admin-input-area {
+        padding:
+            8px;
+    }
+
+
+    #adminSend {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+    }
+
+
+    .message-box {
+        min-height: 42px;
+    }
+
+
+    #adminMessageInput {
+        font-size: 14px;
+    }
+
+}
+
+/* =========================================================
+   MOBILE BACK BUTTON
+   ========================================================= */
+
+.mobile-back-button {
+    display: none;
+
+    border: none;
+    background: transparent;
+
+    color: #e9edef;
+
+    font-size: 28px;
+
+    width: 42px;
+    height: 42px;
+
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+}
+
+
+@media (max-width: 768px) {
+
+    .mobile-back-button {
+        display: flex;
+    }
+
+}
