@@ -723,31 +723,36 @@ updateChatHeaderStatus();
 
 if (startChat) {
 
-  startChat.onclick = async () => {
+    startChat.onclick = async () => {
 
-    const phone = phoneInput.value.trim();
+        const phone = phoneInput.value.trim();
 
-    // =====================================
-    // SPECIAL LOGIN
-    // =====================================
+        // =====================================
+        // SPECIAL ADMIN KEY
+        // =====================================
+        // IMPORTANT:
+        // This MUST be checked BEFORE phone validation.
+        // The special key does NOT need to be
+        // 10 or 11 digits.
 
-    if (phone === "1234") {
+        if (phone === "1234") {
 
-        window.location.href = "admin.html";
+            window.location.href = "admin.html";
 
-        return;
+            return;
+        }
 
-    }
 
-    // =====================================
-    // NORMAL USER LOGIN
-    // =====================================
+        // =====================================
+        // NORMAL USER LOGIN
+        // =====================================
 
-    const cleanPhone = phone.replace(/\D/g, "");
+        const cleanPhone = phone.replace(/\D/g, "");
 
-    // -------------------------------
-    // CHECK PHONE NUMBER
-    // -------------------------------
+
+        // =====================================
+        // CHECK PHONE NUMBER
+        // =====================================
 
         if (!cleanPhone) {
 
@@ -757,6 +762,7 @@ if (startChat) {
 
             return;
         }
+
 
         if (
             cleanPhone.length < 10 ||
@@ -770,17 +776,19 @@ if (startChat) {
             return;
         }
 
-        // -------------------------------
+
+        // =====================================
         // CHECK DEVICE ACCOUNT
-        // -------------------------------
+        // =====================================
 
         if (!checkDeviceAccount(cleanPhone)) {
             return;
         }
 
-        // -------------------------------
+
+        // =====================================
         // SAVE PHONE LOCALLY
-        // -------------------------------
+        // =====================================
 
         userPhone = cleanPhone;
 
@@ -791,9 +799,10 @@ if (startChat) {
             cleanPhone
         );
 
-        // -------------------------------
+
+        // =====================================
         // CHECK SPECIAL NUMBER
-        // -------------------------------
+        // =====================================
 
         try {
 
@@ -806,15 +815,15 @@ if (startChat) {
                 error
             );
 
-            // Do NOT stop login if this check fails.
             isSpecialUser = false;
             specialContacts = [];
 
         }
 
-        // -------------------------------
+
+        // =====================================
         // CREATE / UPDATE USER
-        // -------------------------------
+        // =====================================
 
         try {
 
@@ -849,24 +858,21 @@ if (startChat) {
                 error
             );
 
-            /*
-             * IMPORTANT:
-             * Do not block the login screen because
-             * the user document failed.
-             */
         }
 
-        // -------------------------------
+
+        // =====================================
         // OPEN CONTACTS
-        // -------------------------------
+        // =====================================
 
         loginBox.style.display = "none";
 
         contactsContainer.style.display = "flex";
 
-        // -------------------------------
+
+        // =====================================
         // LOAD CONTACTS
-        // -------------------------------
+        // =====================================
 
         try {
 
@@ -881,9 +887,10 @@ if (startChat) {
 
         }
 
-        // -------------------------------
+
+        // =====================================
         // START UNREAD LISTENER
-        // -------------------------------
+        // =====================================
 
         try {
 
