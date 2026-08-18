@@ -1285,27 +1285,49 @@ specialNumbersList.appendChild(div);
 
 loadSpecialNumbers();
 
-async function unlockFreeUser(conversationId){
+// =====================================
+// TOGGLE FREE USER
+// =====================================
 
-    await updateDoc(
+async function toggleFreeUser(conversationId, currentlyUnlocked){
 
-        doc(db,"conversations",conversationId),
+    const conversationRef =
+        doc(db,"conversations",conversationId);
 
-        {
+    if(currentlyUnlocked){
 
-            freeGranted:true,
+        // =====================================
+        // LOCK USER AGAIN
+        // =====================================
 
-            freeUser:true,
+        await updateDoc(
+            conversationRef,
+            {
+                freeGranted:false,
+                freeUser:false,
+                rechargeLocked:true,
+                unlockedMessages:0
+            }
+        );
 
-            rechargeLocked:false,
+    }else{
 
-            unlockedMessages:0,
+        // =====================================
+        // UNLOCK USER
+        // =====================================
 
-            adminUnlockedAt:serverTimestamp()
+        await updateDoc(
+            conversationRef,
+            {
+                freeGranted:true,
+                freeUser:true,
+                rechargeLocked:false,
+                unlockedMessages:0,
+                adminUnlockedAt:serverTimestamp()
+            }
+        );
 
-        }
-
-    );
+    }
 
 }
 
