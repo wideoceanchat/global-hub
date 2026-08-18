@@ -1718,3 +1718,62 @@ document.getElementById("sendPayment").onclick = async () => {
         .forEach(btn => btn.classList.remove("active"));
 
 };
+
+// =========================================================
+// MOBILE ADMIN CHAT NAVIGATION
+// =========================================================
+
+const adminDashboard =
+    document.querySelector(".admin-dashboard");
+
+const mobileBackToUsers =
+    document.getElementById("mobileBackToUsers");
+
+
+// =========================================================
+// OPEN CONVERSATION ON MOBILE
+// =========================================================
+
+function openMobileAdminChat() {
+
+    if (!adminDashboard) {
+        return;
+    }
+
+    adminDashboard.classList.add(
+        "mobile-chat-open"
+    );
+
+}
+
+
+// =========================================================
+// BACK TO CONVERSATION LIST
+// =========================================================
+
+function closeMobileAdminChat() {
+
+    if (!adminDashboard) {
+        return;
+    }
+
+    adminDashboard.classList.remove(
+        "mobile-chat-open"
+    );
+
+}
+
+
+// =========================================================
+// BACK BUTTON
+// =========================================================
+
+if (mobileBackToUsers) {
+
+    mobileBackToUsers.onclick = () => {
+
+        closeMobileAdminChat();
+
+    };
+
+}
