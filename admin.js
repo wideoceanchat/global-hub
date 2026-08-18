@@ -93,270 +93,307 @@ let adminEditingMessageRef = null;
 // =====================================
 
 
-if(usersList){
-   
-const q = query(
+// =====================================
+// LOAD ALL CONVERSATIONS
+// =====================================
 
-collection(db,"conversations"),
+if (usersList) {
 
-orderBy("updatedAt","desc")
+    const conversationsRef =
+        collection(db, "conversations");
 
-);
+    onSnapshot(
+        conversationsRef,
 
-onSnapshot(q,(snapshot)=>{
+        (snapshot) => {
 
+            usersList.innerHTML = "";
 
+            if (snapshot.empty) {
 
-usersList.innerHTML="";
+                usersList.innerHTML = `
+                    <div class="empty">
+                        Waiting for messages...
+                    </div>
+                `;
 
-if(snapshot.empty){
-
-usersList.innerHTML=`
-
-<div class="empty">
-
-Waiting for messages...
-
-</div>
-
-`;
-
-return;
-
-}
-
-snapshot.forEach((item)=>{
-
-const data =
-item.data();
-
-const id =
-item.id;
-
-const card =
-document.createElement("div");
-
-card.className =
-"user-card";
-
-card.innerHTML = `
-
-<div style="
-display:flex;
-align-items:center;
-gap:12px;
-padding:12px;
-cursor:pointer;
-">
-
-
-<img
-
-src="${data.profileImage}"
-
-style="
-width:55px;
-height:55px;
-border-radius:50%;
-object-fit:cover;
-"
-
->
-
-
-<div>
-
-
-<h3 style="
-margin:0;
-color:white;
-">
-
-${data.profile}
-
-</h3>
-
-
-<p style="
-margin:5px 0 0;
-color:#9aa5ab;
-">
-
-${data.phone}
-
-</p>
-
-
-
-<p style="
-margin:5px 0 0;
-color:#aaa;
-font-size:13px;
-">
-
-${data.lastMessage || "No messages"}
-
-</p>
-
-${
-    data.freeGranted === true || data.freeUser === true
-    ?
-    `
-    <button
-        class="free-user-btn free-unlocked"
-        data-id="${id}"
-        data-unlocked="true"
-    >
-
-        Unlocked
-
-    </button>
-    `
-    :
-    `
-    <button
-        class="free-user-btn"
-        data-id="${id}"
-        data-unlocked="false"
-    >
-
-        Free User
-
-    </button>
-    `
-}i.
-
-
-${
-data.unread > 0
-
-?
-
-`
-
-<div class="message-badge">
-
-${data.unread}
-
-</div>
-
-`
-
-:
-
-""
-
-}
-
-
-</div>
-
-
-</div>
-
-
-`;
-
-card.onclick = async()=>{
-
-    selectedConversation = id;
-
-    selectedCustomerData = data;
-
-    customerName.textContent =
-        data.profile;
-
-    customerPhone.textContent =
-        data.phone;
-
-    customerImage.src =
-        data.profileImage;
-
-    // OPEN CHAT SCREEN ON MOBILE
-    openMobileAdminChat();
-
-    await setDoc(
-
-usersList.appendChild(card);
-
-const freeBtn =
-card.querySelector(".free-user-btn");
-
-if(freeBtn){
-
-    freeBtn.onclick = async(e)=>{
-
-        e.stopPropagation();
-
-        const currentlyUnlocked =
-            freeBtn.dataset.unlocked === "true";
-
-        try{
-
-            // Toggle the user's state in Firestore
-            await toggleFreeUser(
-                id,
-                currentlyUnlocked
-            );
-
-            // =====================================
-            // UPDATE BUTTON IMMEDIATELY
-            // =====================================
-
-            if(currentlyUnlocked){
-
-                // User was unlocked -> lock again
-
-                freeBtn.textContent =
-                    "Free User";
-
-                freeBtn.dataset.unlocked =
-                    "false";
-
-                freeBtn.classList.remove(
-                    "free-unlocked"
-                );
-
-            }else{
-
-                // User was locked -> unlock
-
-                freeBtn.textContent =
-                    "Unlocked";
-
-                freeBtn.dataset.unlocked =
-                    "true";
-
-                freeBtn.classList.add(
-                    "free-unlocked"
-                );
-
+                return;
             }
 
-        }catch(error){
+            // =====================================
+            // CONVERT FIRESTORE DATA TO ARRAY
+            // =====================================
+
+            const conversations = [];
+
+            snapshot.forEach((item) => {
+
+                conversations.push({
+                    id: item.id,
+                    data: item.data()
+                });
+
+            });
+
+            // =====================================
+            // SORT NEWEST CONVERSATIONS FIRST
+            // =====================================
+
+            conversations.sort((a, b) => {
+
+                const aTime =
+                    a.data.updatedAt?.toMillis?.() || 0;
+
+                const bTime =
+                    b.data.updatedAt?.toMillis?.() || 0;
+
+                return bTime - aTime;
+
+            });
+
+            // =====================================
+            // DISPLAY CONVERSATIONS
+            // =====================================
+
+            conversations.forEach(({ id, data }) => {
+
+                const card =
+                    document.createElement("div");
+
+                card.className = "user-card";
+
+                card.innerHTML = `
+
+                    <div class="admin-user-inner">
+
+                        <img
+                            src="${data.profileImage || 'https://i.pravatar.cc/100?img=52'}"
+                            class="admin-user-image"
+                        >
+
+                        <div class="admin-user-info">
+
+                            <h3>
+                                ${data.profile || "Unknown User"}
+                            </h3>
+
+                            <p class="admin-user-phone">
+                                ${data.phone || ""}
+                            </p>
+
+                            <p class="admin-user-last-message">
+                                ${data.lastMessage || "No messages"}
+                            </p>
+
+                            ${
+                                data.freeGranted === true ||
+                                data.freeUser === true
+
+                                ?
+
+                                `
+                                <button
+                                    class="free-user-btn free-unlocked"
+                                    data-id="${id}"
+                                    data-unlocked="true"
+                                >
+                                    Unlocked
+                                </button>
+                                `
+
+                                :
+
+                                `
+                                <button
+                                    class="free-user-btn"
+                                    data-id="${id}"
+                                    data-unlocked="false"
+                                >
+                                    Free User
+                                </button>
+                                `
+                            }
+
+                        </div>
+
+                        ${
+                            data.unread > 0
+
+                            ?
+
+                            `
+                            <div class="message-badge">
+                                ${data.unread}
+                            </div>
+                            `
+
+                            :
+
+                            ""
+                        }
+
+                    </div>
+
+                `;
+
+
+                // =====================================
+                // OPEN CONVERSATION
+                // =====================================
+
+                card.onclick = async () => {
+
+                    selectedConversation = id;
+
+                    selectedCustomerData = data;
+
+                    customerName.textContent =
+                        data.profile || "Unknown User";
+
+                    customerPhone.textContent =
+                        data.phone || "";
+
+                    customerImage.src =
+                        data.profileImage ||
+                        "https://i.pravatar.cc/100?img=52";
+
+
+                    // =================================
+                    // MOBILE: OPEN CHAT
+                    // =================================
+
+                    openMobileAdminChat();
+
+
+                    // =================================
+                    // REMOVE UNREAD COUNT
+                    // =================================
+
+                    await setDoc(
+
+                        doc(
+                            db,
+                            "conversations",
+                            id
+                        ),
+
+                        {
+                            unread: 0
+                        },
+
+                        {
+                            merge: true
+                        }
+
+                    );
+
+
+                    await markMessagesRead(id);
+
+                    loadAdminMessages(id);
+
+                };
+
+
+                usersList.appendChild(card);
+
+
+                // =====================================
+                // FREE USER BUTTON
+                // =====================================
+
+                const freeBtn =
+                    card.querySelector(".free-user-btn");
+
+
+                if (freeBtn) {
+
+                    freeBtn.onclick = async (e) => {
+
+                        e.stopPropagation();
+
+                        const currentlyUnlocked =
+                            freeBtn.dataset.unlocked === "true";
+
+
+                        try {
+
+                            await toggleFreeUser(
+                                id,
+                                currentlyUnlocked
+                            );
+
+
+                            if (currentlyUnlocked) {
+
+                                freeBtn.textContent =
+                                    "Free User";
+
+                                freeBtn.dataset.unlocked =
+                                    "false";
+
+                                freeBtn.classList.remove(
+                                    "free-unlocked"
+                                );
+
+                            } else {
+
+                                freeBtn.textContent =
+                                    "Unlocked";
+
+                                freeBtn.dataset.unlocked =
+                                    "true";
+
+                                freeBtn.classList.add(
+                                    "free-unlocked"
+                                );
+
+                            }
+
+                        } catch (error) {
+
+                            console.error(
+                                "Unable to change Free User status:",
+                                error
+                            );
+
+                            alert(
+                                "Unable to change Free User status."
+                            );
+
+                        }
+
+                    };
+
+                }
+
+            });
+
+        },
+
+        (error) => {
 
             console.error(
-                "Unable to change Free User status:",
+                "Error loading conversations:",
                 error
             );
 
-            alert(
-                "Unable to change Free User status. Please try again."
-            );
+            usersList.innerHTML = `
+                <div class="empty" style="
+                    padding:20px;
+                    color:#ff6b6b;
+                ">
+                    Unable to load messages.
+                    <br>
+                    <small>
+                        Check Firestore permissions.
+                    </small>
+                </div>
+            `;
 
         }
 
-    };
-
-}
-
-});
-
-
-
-});
-
-
+    );
 
 }
 
