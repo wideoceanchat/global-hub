@@ -199,24 +199,31 @@ ${data.lastMessage || "No messages"}
 </p>
 
 ${
-data.freeGranted
-?
-`
-<span class="free-user-active">
+    data.freeGranted === true || data.freeUser === true
+    ?
+    `
+    <button
+        class="free-user-btn free-unlocked"
+        data-id="${id}"
+        data-unlocked="true"
+    >
 
-Unlocked
+        Unlocked
 
-</span>
-`
-:
-`
-<button
-class="free-user-btn"
-data-id="${id}"
->
-Free User
-</button>
-`
+    </button>
+    `
+    :
+    `
+    <button
+        class="free-user-btn"
+        data-id="${id}"
+        data-unlocked="false"
+    >
+
+        Free User
+
+    </button>
+    `
 }i.
 
 
