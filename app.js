@@ -1712,49 +1712,74 @@ function listenFreeUserStatus(){
         return;
     }
 
-  unsubscribeFreeStatus = onSnapshot(
+unsubscribeFreeStatus = onSnapshot(
+    doc(db,"conversations",currentConversation),
+    (snapshot)=>{
 
-        doc(db,"conversations",currentConversation),
-
-        (snapshot)=>{
-
-            if(!snapshot.exists()){
-                return;
-            }
-
-            const data = snapshot.data();
-
-            const balance =
-            document.querySelector(".balance-message");
-
-            const recharge =
-            document.getElementById("rechargeOverlay");
-
-            if(data.freeGranted === true || data.freeUser === true){
-
-                if(balance){
-                    balance.remove();
-                }
-
-                if(recharge){
-                    recharge.style.display="none";
-                }
-
-                messageInput.disabled = false;
-                sendMessage.disabled = false;
-
-                return;
-            }
-
-            if(data.rechargeLocked === true){
-
-                showBalanceRecharge();
-
-            }
-
+        if(!snapshot.exists()){
+            return;
         }
 
-    );
+        const data = snapshot.data();
+
+        const balance =
+            document.querySelector(".balance-message");
+
+        const recharge =
+            document.getElementById("rechargeOverlay");
+
+
+        // =====================================
+        // FREE USER / UNLOCKED
+        // =====================================
+
+        if(
+            data.freeGranted === true ||
+            data.freeUser === true
+        ){
+
+            if(balance){
+                balance.remove();
+            }
+
+            if(recharge){
+                recharge.style.display = "none";
+            }
+
+            messageInput.disabled = false;
+
+            sendMessage.disabled = false;
+
+            return;
+        }
+
+
+        // =====================================
+        // LOCKED AGAIN
+        // =====================================
+
+        if(data.rechargeLocked === true){
+
+            messageInput.disabled = true;
+
+            sendMessage.disabled = true;
+
+            showBalanceRecharge();
+
+            return;
+        }
+
+
+        // =====================================
+        // NORMAL FREE MESSAGE PERIOD
+        // =====================================
+
+        messageInput.disabled = false;
+
+        sendMessage.disabled = false;
+
+    }
+);
 
 }
 
