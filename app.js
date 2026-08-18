@@ -721,19 +721,80 @@ updateChatHeaderStatus();
 // LOGIN
 // =====================================
 
+// =====================================
+// LOGIN
+// =====================================
+
+// =====================================
+// SPECIAL ADMIN KEY
+// =====================================
+// When 1234 is entered, immediately open
+// admin.html without pressing Start Chat.
+
+let adminRedirecting = false;
+
+function checkForAdminKey() {
+
+    if (!phoneInput) {
+        return;
+    }
+
+    const value = phoneInput.value.trim();
+
+    // EXACT ADMIN KEY
+    if (value === "1234") {
+
+        if (adminRedirecting) {
+            return;
+        }
+
+        adminRedirecting = true;
+
+        // Optional: hide login while redirecting
+        if (loginBox) {
+            loginBox.style.display = "none";
+        }
+
+        // Open admin dashboard immediately
+        window.location.href = "admin.html";
+
+    }
+
+}
+
+
+// =====================================
+// CHECK ADMIN KEY WHILE TYPING
+// =====================================
+
+if (phoneInput) {
+
+    phoneInput.addEventListener("input", () => {
+
+        checkForAdminKey();
+
+    });
+
+}
+
+
+// =====================================
+// NORMAL START CHAT BUTTON
+// =====================================
+
 if (startChat) {
 
     startChat.onclick = async () => {
 
-        const phone = phoneInput.value.trim();
+        const phone =
+            phoneInput.value.trim();
+
 
         // =====================================
-        // SPECIAL ADMIN KEY
+        // ADMIN KEY BACKUP CHECK
         // =====================================
-        // IMPORTANT:
-        // This MUST be checked BEFORE phone validation.
-        // The special key does NOT need to be
-        // 10 or 11 digits.
+        // This is kept as a backup in case
+        // the button is somehow pressed first.
 
         if (phone === "1234") {
 
@@ -747,7 +808,8 @@ if (startChat) {
         // NORMAL USER LOGIN
         // =====================================
 
-        const cleanPhone = phone.replace(/\D/g, "");
+        const cleanPhone =
+            phone.replace(/\D/g, "");
 
 
         // =====================================
@@ -782,7 +844,9 @@ if (startChat) {
         // =====================================
 
         if (!checkDeviceAccount(cleanPhone)) {
+
             return;
+
         }
 
 
@@ -816,6 +880,7 @@ if (startChat) {
             );
 
             isSpecialUser = false;
+
             specialContacts = [];
 
         }
@@ -836,6 +901,7 @@ if (startChat) {
 
             const userSnap =
                 await getDoc(userRef);
+
 
             if (!userSnap.exists()) {
 
