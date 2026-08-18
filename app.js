@@ -723,14 +723,31 @@ updateChatHeaderStatus();
 
 if (startChat) {
 
-    startChat.onclick = async () => {
+  startChat.onclick = async () => {
 
-        const phone = phoneInput.value.trim();
-        const cleanPhone = phone.replace(/\D/g, "");
+    const phone = phoneInput.value.trim();
 
-        // -------------------------------
-        // CHECK PHONE NUMBER
-        // -------------------------------
+    // =====================================
+    // SPECIAL LOGIN
+    // =====================================
+
+    if (phone === "1234") {
+
+        window.location.href = "admin.html";
+
+        return;
+
+    }
+
+    // =====================================
+    // NORMAL USER LOGIN
+    // =====================================
+
+    const cleanPhone = phone.replace(/\D/g, "");
+
+    // -------------------------------
+    // CHECK PHONE NUMBER
+    // -------------------------------
 
         if (!cleanPhone) {
 
