@@ -259,42 +259,23 @@ ${data.unread}
 
 card.onclick = async()=>{
 
-selectedConversation = id;
+    selectedConversation = id;
 
-selectedCustomerData = data;
+    selectedCustomerData = data;
 
-customerName.textContent =
-data.profile;
+    customerName.textContent =
+        data.profile;
 
-customerPhone.textContent =
-data.phone;
+    customerPhone.textContent =
+        data.phone;
 
-customerImage.src =
-data.profileImage;
+    customerImage.src =
+        data.profileImage;
 
-await setDoc(
+    // OPEN CHAT SCREEN ON MOBILE
+    openMobileAdminChat();
 
-doc(db,"conversations",id),
-
-{
-
-unread:0
-
-},
-
-{
-
-merge:true
-
-}
-
-);
-
-await markMessagesRead(id);
-
-loadAdminMessages(id);
-
-};
+    await setDoc(
 
 usersList.appendChild(card);
 
