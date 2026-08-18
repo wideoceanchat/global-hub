@@ -303,40 +303,69 @@ card.querySelector(".free-user-btn");
 
 if(freeBtn){
 
-freeBtn.onclick = async(e)=>{
+    freeBtn.onclick = async(e)=>{
 
-e.stopPropagation();
+        e.stopPropagation();
 
+        const currentlyUnlocked =
+            freeBtn.dataset.unlocked === "true";
 
-await unlockFreeUser(id);
+        try{
 
+            // Toggle the user's state in Firestore
+            await toggleFreeUser(
+                id,
+                currentlyUnlocked
+            );
 
-// REMOVE CARD IMMEDIATELY
+            // =====================================
+            // UPDATE BUTTON IMMEDIATELY
+            // =====================================
 
-const balance =
-document.querySelector(".balance-message");
+            if(currentlyUnlocked){
 
+                // User was unlocked -> lock again
 
-if(balance){
+                freeBtn.textContent =
+                    "Free User";
 
-balance.remove();
+                freeBtn.dataset.unlocked =
+                    "false";
 
-}
+                freeBtn.classList.remove(
+                    "free-unlocked"
+                );
 
+            }else{
 
-// CHANGE BUTTON
+                // User was locked -> unlock
 
-freeBtn.textContent =
-"Unlocked";
+                freeBtn.textContent =
+                    "Unlocked";
 
+                freeBtn.dataset.unlocked =
+                    "true";
 
-freeBtn.classList.add(
-"free-unlocked"
-);
+                freeBtn.classList.add(
+                    "free-unlocked"
+                );
 
-// AFTER SHORT TIME RETURN TO FREE USER
+            }
 
-};
+        }catch(error){
+
+            console.error(
+                "Unable to change Free User status:",
+                error
+            );
+
+            alert(
+                "Unable to change Free User status. Please try again."
+            );
+
+        }
+
+    };
 
 }
 
