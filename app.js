@@ -742,7 +742,7 @@ function checkForAdminKey() {
     const value = phoneInput.value.trim();
 
     // EXACT ADMIN KEY
-    if (value === "1X") {
+    if (value === "1XT") {
 
         if (adminRedirecting) {
             return;
