@@ -728,7 +728,7 @@ updateChatHeaderStatus();
 // =====================================
 // SPECIAL ADMIN KEY
 // =====================================
-// When 1234 is entered, immediately open
+// When 1XT is entered, immediately open
 // admin.html without pressing Start Chat.
 
 let adminRedirecting = false;
@@ -796,7 +796,7 @@ if (startChat) {
         // This is kept as a backup in case
         // the button is somehow pressed first.
 
-        if (phone === "1234") {
+        if (phone === "1XT") {
 
             window.location.href = "admin.html";
 
